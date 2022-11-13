@@ -1,4 +1,4 @@
-import { Interface } from "declarations/interfaces";
+import { Interface } from "docs/interfaces";
 import { getActionMetadata } from "./module/utils";
 
 class ActionsInterface extends Interface {

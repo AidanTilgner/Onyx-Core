@@ -1,4 +1,4 @@
-import { Interfacer } from "declarations/interfaces";
+import { Interfacer } from "docs/interfaces";
 import ActionsInterface from "actions/interface";
 
 class InterpretationInterfacer extends Interfacer {
