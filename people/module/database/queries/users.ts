@@ -1,7 +1,7 @@
-import db from "utils/surrealdb";
-import { generateRandomPassword, hashPassword } from "utils/crypto";
-import { User } from "interfaces/users";
-import { AllowedRoles } from "interfaces/roles";
+import db from "../../utils/surrealdb";
+import { generateRandomPassword, hashPassword } from "../../utils/crypto";
+import { User } from "../../interfaces/users";
+import { AllowedRoles } from "../../interfaces/roles";
 
 export const addUser = async (
   username: string,

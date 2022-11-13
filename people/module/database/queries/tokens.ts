@@ -1,4 +1,4 @@
-import db from "utils/surrealdb";
+import db from "../../utils/surrealdb";
 
 export const addRefreshToken = async (key: string, token: string) => {
   try {

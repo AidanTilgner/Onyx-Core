@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { deleteUser, disableUser, getUser } from "database/queries/users";
-import { addUser, getMe, getUsers, logoutUser } from "controllers/users";
-import { refreshUser, signInUser } from "controllers/users";
-import { authenticateSuperUser, authenticateToken } from "middleware/auth";
-import { hasRole } from "@utils/auth";
-import { User } from "interfaces/users";
+import { deleteUser, disableUser, getUser } from "../database/queries/users";
+import { addUser, getMe, getUsers, logoutUser } from "../controllers/users";
+import { refreshUser, signInUser } from "../controllers/users";
+import { authenticateSuperUser, authenticateToken } from "../middleware/auth";
+import { hasRole } from "../utils/auth";
+import { User } from "../interfaces/users";
 
 const router = Router();
 
