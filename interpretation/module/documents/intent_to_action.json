@@ -1,0 +1,53 @@
+{
+  "greeting": {
+    "hello": {
+      "default": "say_hello",
+      "how_are_you": "say_hello.explain_state"
+    },
+    "goodbye": {
+      "default": "say_goodbye",
+      "well_wishing": "say_goodbye.well_wishing",
+      "informative": "say_goodbye.informative"
+    }
+  },
+  "inquiry": {
+    "how_are_you": { "default": "state.describe_current" },
+    "obtain_important_information": {
+      "default": "share_important_information"
+    },
+    "obtain_interesting_information": {
+      "default": "share_interesting_information"
+    },
+    "about_you": { "default": "explain_existence" }
+  },
+  "faq": {
+    "weather": { "default": "weather" },
+    "who_built_you": { "default": "explain_developers" },
+    "temperature": {
+      "default": "weather.temperature",
+      "tomorrow": "weather.temperature.tomorrow"
+    },
+    "what_should_i_wear": {
+      "default": "recommend_clothing",
+      "at_event": "recommend_clothing.for_event",
+      "with_item": "recommend_clothing.for_item"
+    }
+  },
+  "describe_state": {
+    "good": { "default": "respond_to_good_state" },
+    "bad": { "default": "respond_to_bad_state" },
+    "emotions": {
+      "default": "interpret_emotions",
+      "good": "respond_to_good_emotions",
+      "bad": "respond_to_bad_emotions"
+    }
+  },
+  "ooga": { "booga": { "default": "ooga_some_boogas" } },
+  "express_opinion": {
+    "disinterest": { "default": "respond_to_opinion.disinterest" }
+  },
+  "test": { "test": { "test": "test.test" } },
+  "describe_clothing": {
+    "specific": { "default": "comment_on_clothing.specific" }
+  }
+}

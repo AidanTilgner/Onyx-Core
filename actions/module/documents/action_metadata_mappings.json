@@ -1,0 +1,20 @@
+{
+  "recommend_clothing": {
+    "for_event": {
+      "expected_entities": [
+        {
+          "type": "event",
+          "custom_query": "What event are you going to?"
+        }
+      ]
+    },
+    "for_item": {
+      "expected_entities": [
+        {
+          "type": "clothing_item",
+          "custom_query": "What else are you wearing?"
+        }
+      ]
+    }
+  }
+}

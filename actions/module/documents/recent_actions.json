@@ -1,0 +1,7 @@
+[
+  "weather.temperature",
+  "weather.default",
+  "state.describe_current",
+  "state.default",
+  "recommend_clothing.for_item"
+]
