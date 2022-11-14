@@ -13,11 +13,17 @@ export const refreshToken = async (key: string, refresh_token: string) => {
       };
     }
 
-    const {
-      result: { value: token },
-      error,
-      message,
-    } = await getRefreshToken(key);
+    const { result, error, message } = await getRefreshToken(key);
+
+    if (!result) {
+      return {
+        error,
+        message,
+        status: 500,
+      };
+    }
+
+    const { value: token } = result;
 
     if (error) {
       return {

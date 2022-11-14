@@ -9,7 +9,8 @@ import existing_actions_without_response from "./documents/existing_actions_with
 
 import { getAction, getResponse } from "./nlp";
 
-const pathToLocal = "./nlp/documents";
+// TODO: Get this from the path instead of hardcoding it
+const pathToLocal = "src/interpretation/module/documents";
 
 export const getTrainingData = () => {
   return {

@@ -9,8 +9,8 @@ export const addUser = async (
 ): Promise<{
   user?: User;
   generated_password?: string;
-  error?: string;
-} | null> => {
+  error?: any;
+}> => {
   try {
     if (!username) {
       return {
@@ -76,14 +76,14 @@ export const checkUserExists = async (username: string): Promise<boolean> => {
     return false;
   } catch (err) {
     console.error(err);
-    return null;
+    return false;
   }
 };
 
 export const getUser = async (
   username: string,
   withPassword?: boolean
-): Promise<{ user?: User; error?: string } | null> => {
+): Promise<{ user?: Partial<User>; error?: any }> => {
   try {
     if (!username) {
       return {
@@ -91,12 +91,12 @@ export const getUser = async (
       };
     }
 
-    const [result] = await db.query(
+    const [result] = (await db.query(
       "SELECT * FROM users WHERE username = $username",
       {
         username: username,
       }
-    );
+    )) as Array<{ result: Array<User> }>;
 
     if ((result.result as any[])?.length === 0) {
       return {
@@ -105,11 +105,13 @@ export const getUser = async (
     }
 
     const user = result.result[0] as User;
+
+    const userToSend: Partial<User> = user;
     if (!withPassword) {
-      delete user.password;
+      delete userToSend.password;
     }
 
-    return { user };
+    return { user: userToSend };
   } catch (err) {
     console.error(err);
     return {
@@ -185,8 +187,8 @@ export const updateRole = async (username: string, role: string) => {
 
 export const getUsers = async (): Promise<{
   users?: Array<User>;
-  error?: string;
-} | null> => {
+  error?: any;
+}> => {
   try {
     const [result] = await db.query("SELECT * FROM users");
 
@@ -211,7 +213,7 @@ export const disableUser = async (
   username: string
 ): Promise<{
   result?: any;
-  error?: string;
+  error?: any;
   message?: string;
 }> => {
   try {

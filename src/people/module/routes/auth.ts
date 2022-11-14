@@ -37,8 +37,8 @@ router.post("/check", async (req, res) => {
         validated: false,
       });
     }
-    if ((validated as User).password) {
-      delete (validated as User).password;
+    if ((validated as Partial<User>).password) {
+      delete (validated as Partial<User>).password;
     }
     res.status(200).send({
       message: "Token is valid",

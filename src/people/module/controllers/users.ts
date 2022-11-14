@@ -85,7 +85,14 @@ export const signInUser = async (username: string, password: string) => {
 
     // Compare passwords
     const { password: hashedPassword } = user;
-    console.log("Passwords: ", password, hashedPassword);
+
+    if (!hashedPassword) {
+      return {
+        error: "User not found",
+        message: "User not found",
+      };
+    }
+
     const isPasswordCorrect = await comparePassword(password, hashedPassword);
 
     if (!isPasswordCorrect) {
@@ -134,11 +141,17 @@ export const refreshUser = async (refresh_token: string, username: string) => {
     }
 
     const response = await getRefreshToken(username);
-    const {
-      result: { value: token },
-      error,
-      message,
-    } = response;
+    const { result, error, message } = response;
+
+    if (!result) {
+      return {
+        error,
+        message,
+        validated: false,
+      };
+    }
+
+    const { value: token } = result;
 
     if (error) {
       return {
@@ -174,9 +187,13 @@ export const refreshUser = async (refresh_token: string, username: string) => {
       };
     }
 
-    delete user.password;
+    const userToSend: Partial<User> = {
+      ...user,
+    };
 
-    const new_access_token = generateToken(user);
+    delete userToSend.password;
+
+    const new_access_token = generateToken(userToSend);
 
     return {
       message: "User authenticated successfully",

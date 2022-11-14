@@ -33,8 +33,10 @@ export const hasRole = async (
     if (!userResponse) return false;
     const { user } = userResponse;
     if (!user) return false;
-    console.log("has role for user", username);
     // if the rank of the role is less than or equal to the rank of the user's role, return true
+    if (!user.role) {
+      return false;
+    }
     return roles[role].rank <= roles[user.role].rank;
   } catch (err) {
     console.error(err);
@@ -42,13 +44,15 @@ export const hasRole = async (
   }
 };
 
-export const getRole = async (username: string): Promise<Role> => {
+export const getRole = async (username: string): Promise<Role | null> => {
   try {
     const userResponse = await getUser(username);
     if (!userResponse) return roles.user;
     const { user } = userResponse;
     if (!user) return roles.user;
-    console.log("got role for user", username);
+    if (!user.role) {
+      return null;
+    }
     return roles[user.role];
   } catch (err) {
     console.error(err);
@@ -76,6 +80,7 @@ export const getAllowedRoles = async (username: string) => {
   try {
     const userRole = await getRole(username);
     const allowedRoles: string[] = [];
+    if (!userRole) return allowedRoles;
     for (const role in roles) {
       if (roles[role].rank > userRole.rank) {
         allowedRoles.push(role);
@@ -112,6 +117,10 @@ export const initDefaultUser = async () => {
     );
     if (error) {
       console.error(error);
+      return;
+    }
+    if (!user) {
+      console.error("No user returned");
       return;
     }
     console.log("Added default user");

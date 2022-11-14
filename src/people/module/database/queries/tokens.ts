@@ -30,12 +30,12 @@ export const addRefreshToken = async (key: string, token: string) => {
 
 export const getRefreshToken = async (key: string) => {
   try {
-    const [result] = await db.query(
+    const [result] = (await db.query(
       "SELECT * FROM reset_token WHERE key = $key",
       {
         key: key,
       }
-    );
+    )) as Array<{ result: { value: string } }>;
     const token = result.result[0] as { value: string };
 
     if (!token) {
