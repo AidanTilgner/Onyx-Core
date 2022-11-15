@@ -1,11 +1,7 @@
 import { Router } from "express";
-import { startNLP } from "../module/index";
 import { getIntentAndAction, unstable_getNLUData } from "../module/nlp";
 
 const router = Router();
-
-startNLP();
-// startNer();
 
 const generateRandomSessionId = () => {
   return (

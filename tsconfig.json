@@ -37,7 +37,8 @@
       "people/*": ["./people/*"],
       "actions/*": ["./actions/*"],
       "speech/*": ["./speech/*"],
-      "docs/*": ["./docs/*"]
+      "docs/*": ["./docs/*"],
+      "procedures/*": ["./procedures/*"]
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like `./node_modules/@types`. */
@@ -109,9 +110,9 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": ["./**/*"],
-  "ts-node": {
-    // Do not forget to `npm i -D tsconfig-paths`
-    "require": ["tsconfig-paths/register"]
-  }
+  "include": ["./src/**/*"],
+  // exclude any files in directories named "documents"
+  "exclude": ["node_modules", "**/*.d.ts", "**/*.json"], // Make sure ts-node-dev also gets this array in package.json  "ts-node": {
+  // Do not forget to `npm i -D tsconfig-paths`
+  "require": ["tsconfig-paths/register"]
 }

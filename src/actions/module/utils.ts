@@ -1,4 +1,4 @@
-import mappings from "./index";
+import mappings, { Mappings } from "./mappings";
 import action_metadata_mappings from "./documents/action_metadata_mappings.json";
 import recent_actions from "./documents/recent_actions.json";
 import { writeFileSync } from "fs";
@@ -60,4 +60,16 @@ export const getRecentActions = () => {
   const jsonCopy = recent_actions as string[];
 
   return jsonCopy;
+};
+
+export const getActionFromActionString = (actionString: string) => {
+  const [action, subaction = "default"] = actionString.split(".");
+
+  const realAction = mappings[action]?.[subaction] as Mappings;
+
+  if (!realAction) {
+    return null;
+  }
+
+  return realAction;
 };

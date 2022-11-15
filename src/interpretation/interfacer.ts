@@ -5,7 +5,7 @@ class InterpretationInterfacer extends Interfacer {
   public actionsInterface: ActionsInterface;
 
   constructor() {
-    super();
+    super("Interpretation");
     this.actionsInterface = new ActionsInterface();
   }
 }

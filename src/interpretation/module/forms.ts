@@ -1,4 +1,5 @@
 import Interfacer from "interpretation/interfacer";
+import type { Entity } from "./index.d";
 
 const interfacer = new Interfacer();
 const Actions = interfacer.actionsInterface;
@@ -203,10 +204,7 @@ export const checkOpensFormAndOpenIfNecessary = async (
 
 export const checkCompletesFields = (
   session_id: string,
-  entities: {
-    entity: string;
-    option: string;
-  }[]
+  entities: Entity[]
 ) => {
   const actions: string[] = [];
 

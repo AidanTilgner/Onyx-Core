@@ -1,27 +1,8 @@
-import weatherMappings from "./types/weather";
-import exceptionMappings from "./types/exceptions";
-import stateMappings from "./types/state";
-import { recommendClothingMappings } from "./types/clothing";
+import { NLUResponse } from "./index.d";
+import mappings from "./index";
+import { getActionFromActionString } from "./utils";
 
-const parseAndUseNLU = async (nlu: {
-  intents: string[];
-  actions: string[];
-  nlu_response: string;
-  entities: {
-    entity: string;
-    type: string;
-    option: string;
-  }[];
-  responses: string[];
-  classifications: {
-    intent: string;
-    score: string;
-  }[];
-  initial_actions: string[];
-  initial_input: string;
-  split_input: string[];
-  metaData: any;
-}) => {
+export const parseAndUseNLU = async (nlu: NLUResponse) => {
   try {
     const {
       intents,
@@ -61,11 +42,13 @@ const parseAndUseNLU = async (nlu: {
       const intent = intents[i];
       const action = actions[i];
       const response = responses[i];
-      const [act, subact = "default"] = action.split(".");
       // TODO: If in production, use the default action instead of saying "action not found"
-      const performAction = mappings[act]?.[subact]
-        ? mappings[act][subact]
-        : mappings.exception.action_not_found;
+      const performAction = getActionFromActionString(action);
+
+      if (!performAction) {
+        toSend.custom_message += " An action not found.";
+        continue;
+      }
 
       const entitiesObject: { [key: string]: string } = {};
       for (let i = 0; i < entities.length; i++) {
@@ -115,19 +98,3 @@ const parseAndUseNLU = async (nlu: {
     };
   }
 };
-
-interface Mappings {
-  [key: string]: {
-    [key: string]: (...args: any[]) => any;
-  };
-}
-
-const mappings: Mappings = {
-  weather: weatherMappings,
-  parse_and_use_nlu: { default: parseAndUseNLU },
-  state: stateMappings,
-  exception: exceptionMappings,
-  recommend_clothing: recommendClothingMappings,
-};
-
-export default mappings;

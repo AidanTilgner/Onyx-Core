@@ -1,3 +1,13 @@
-export class Interface {}
+export class Interface {
+  public name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+}
 
-export class Interfacer {}
+export class Interfacer {
+  public name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+}

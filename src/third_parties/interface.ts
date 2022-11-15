@@ -5,7 +5,7 @@ class ThirdPartiesInterface extends Interface {
   public thirdPartyApi: typeof thirdPartyApi = thirdPartyApi;
 
   constructor() {
-    super();
+    super("ThirdParties");
   }
 }
 

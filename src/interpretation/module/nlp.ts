@@ -1,9 +1,10 @@
 import { NlpManager } from "node-nlp";
-import { TextToIntent } from "./index.d";
+import { Entity, TextToIntent } from "./index.d";
 import text_to_intent_json from "./documents/text_to_intent.json";
 import intent_to_action_json from "./documents/intent_to_action.json";
 import action_to_response_json from "./documents/action_to_response.json";
 import entities_json from "./documents/entities.json";
+import nlu_config from "./documents/config.json";
 import { spellCheckText } from "./similarity/spellcheck";
 import { writeFileSync } from "fs";
 import {
@@ -17,6 +18,7 @@ import {
   checkCompletesFields,
 } from "./forms";
 import { dockStart } from "@nlpjs/basic";
+import type { MetaData } from "./index.d";
 
 let manager: NlpManager = null;
 export const initModel = async () => {
@@ -41,11 +43,11 @@ export const trainModel = async () => {
 
     const intentsList: string[] = [];
     text_to_intent.forEach((item) => {
-      const { text, intent, language } = item;
+      const { text, intent, language = nlu_config.defaultLanguage } = item;
       if (!intentsList.includes(intent)) {
         intentsList.push(intent);
       }
-      manager.addDocument(language || "en", text, intent);
+      manager.addDocument(language, text, intent);
     });
 
     Object.keys(entities).forEach((entity) => {
@@ -53,7 +55,7 @@ export const trainModel = async () => {
       entities[entity].options.forEach(
         (option: { name: string; examples: string[]; language: string }) => {
           manager.addNerRuleOptionTexts(
-            option.language || "en",
+            option.language || nlu_config.defaultLanguage,
             entity,
             option.name,
             option.examples
@@ -82,7 +84,7 @@ export const trainModel = async () => {
 export const testModel = async () => {
   try {
     console.log("Testing model...");
-    const language = "en";
+    const language = nlu_config.defaultLanguage;
     const tests = [
       {
         try: "Hello",
@@ -147,9 +149,10 @@ export const generateMetaData = () => {
   generateExistingActionsWithoutResponse();
 };
 
-export const getIntent = async (lang: string, input: string) => {
+export const getIntent = async (input: string, lang?: string) => {
   try {
-    const intent = await manager.process(lang, input);
+    const language = lang || nlu_config.defaultLanguage;
+    const intent = await manager.process(language, input);
     return intent;
   } catch (err) {
     console.error(err);
@@ -167,10 +170,7 @@ export const getAction = (int: string): string => {
   return action;
 };
 
-export const getResponse = (
-  act: string,
-  entities?: { entity: string; option: string }[] | null
-) => {
+export const getResponse = (act: string, entities?: Entity[] | null) => {
   const [action, subaction = "default"] = act.split(".");
   const responses = action_to_response_json[action]?.[subaction]?.responses;
   if (!responses) {
@@ -185,11 +185,15 @@ export const getResponse = (
 
 export const getIntentAndAction = async (input: string, lang: string) => {
   try {
-    const { intent, ...rest } = await manager.process(lang, input);
+    const language = lang || nlu_config.defaultLanguage;
+    const { intent, ...rest } = await manager.process(language, input);
     const foundIntent = intent || rest.classifications[0].intent;
     const foundAction = getAction(foundIntent);
 
-    if (!foundIntent || rest.classifications[0].score < 0.5) {
+    if (
+      !foundIntent ||
+      rest.classifications[0].score < nlu_config.classification_threshold
+    ) {
       return {
         intent: "exception.unknown",
         action: "attempt_understanding",
@@ -245,7 +249,10 @@ export const getIntentAndActionForSpeechServer = async (input: {
     const foundIntent = intent || rest.classifications[0].intent;
     const foundAction = getAction(foundIntent);
 
-    if (!foundIntent || rest.classifications[0].score < 0.5) {
+    if (
+      !foundIntent ||
+      rest.classifications[0].score < nlu_config.classification_threshold
+    ) {
       return {
         intent: "exception.unknown",
         action: "attempt_understanding",
@@ -310,6 +317,19 @@ export const condenseResponses = (session_id: string, responses: string[]) => {
   return response;
 };
 
+export const condenseResponsesWithoutSession = (responses: string[]) => {
+  let response = "";
+
+  responses.forEach((res) => {
+    if (res === "custom_message") {
+      return;
+    }
+    response += response.length ? ". " + res : res;
+  });
+
+  return response;
+};
+
 export const splitInputBySentence = (input: string) => {
   // split by . or ? or ! or ;
   const split = input.split(/\.|\?|\!|\;/);
@@ -320,26 +340,20 @@ export const splitInputBySentence = (input: string) => {
 export const unstable_getNLUData = async (
   session_id: string,
   input: string,
-  language: string
+  lang?: string
 ) => {
+  const language = lang || nlu_config.defaultLanguage;
   const splitInput = splitInputBySentence(input);
   const intents: string[] = [];
   const classifications: {
     intent: string;
     score: number;
   }[] = [];
-  const entities: { entity: string; option: string }[] = [];
-  const nluArray: any[] = [];
+  const entities: Entity[] = [];
+  const nluArray: MetaData[] = [];
 
   for (const inp of splitInput) {
-    const nlu = (await manager.process(language, inp)) as {
-      intent: string;
-      classifications: {
-        intent: string;
-        score: number;
-      }[];
-      entities: { entity: string; option: string }[];
-    };
+    const nlu = (await manager.process(language, inp)) as MetaData;
     const {
       intent,
       classifications: inpClassifications,
@@ -397,6 +411,81 @@ export const unstable_getNLUData = async (
     (act) => getResponse(act, entities).response
   );
   const response = condenseResponses(session_id, responses);
+  return {
+    intents,
+    actions: useableActions,
+    nlu_response: response,
+    responses,
+    entities,
+    classifications,
+    custom_entities: custom_entities_mappings,
+    initial_input: input,
+    split_input: splitInput,
+    initial_actions: initialActions,
+    metaData: nluArray,
+  };
+};
+
+export const unstable_getNLUDataWithoutSession = async (
+  input: string,
+  lang?: string
+) => {
+  const language = lang || nlu_config.defaultLanguage;
+  const splitInput = splitInputBySentence(input);
+  const intents: string[] = [];
+  const classifications: {
+    intent: string;
+    score: number;
+  }[] = [];
+  const entities: Entity[] = [];
+  const nluArray: MetaData[] = [];
+
+  for (const inp of splitInput) {
+    const nlu = (await manager.process(language, inp)) as MetaData;
+    const {
+      intent,
+      classifications: inpClassifications,
+      entities: inpEntities,
+    } = nlu;
+    intents.push(intent);
+    inpClassifications.forEach((cl) => {
+      if (cl.score > 0.5) {
+        console.log("Pushing Classification: ", cl);
+        classifications.push(cl);
+      }
+    });
+    // destructer entities into entities array
+    inpEntities.forEach((ent) => {
+      entities.push(ent);
+    });
+    nluArray.push(nlu);
+  }
+
+  if (!intents.length) {
+    intents.push(classifications[0].intent);
+  }
+
+  const initialActions = intents.map((int) => {
+    return getAction(int);
+  });
+
+  const custom_entities_mappings: {
+    [action: string]: any;
+  } = {};
+
+  const useableActions: string[] = [];
+
+  for (let i = 0; i < initialActions.length; i++) {
+    const action = initialActions[i];
+    if (action === "no_action") {
+      continue;
+    }
+    useableActions.push(action);
+  }
+  const responses = useableActions.map(
+    (act) => getResponse(act, entities).response
+  );
+  const response = condenseResponsesWithoutSession(responses);
   return {
     intents,
     actions: useableActions,

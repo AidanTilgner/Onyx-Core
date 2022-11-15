@@ -5,7 +5,7 @@ class ActionsInterfacer extends Interfacer {
   public thirdPartiesInterface: ThirdPartiesInterface;
 
   constructor() {
-    super();
+    super("Actions");
     this.thirdPartiesInterface = new ThirdPartiesInterface();
   }
 }
