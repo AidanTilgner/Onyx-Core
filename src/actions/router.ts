@@ -1,9 +1,8 @@
 import { Router } from "express";
+import ActionsRouter from "./module/routes/actions";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.send("Hello from the actions router!");
-});
+router.use("/api/actions", ActionsRouter);
 
 export default router;

@@ -1,11 +1,11 @@
 import { Router } from "express";
-import mappings from "../../../../../Actions/actions";
+import mappings from "../mappings";
 import {
   getActionMetadata,
   addRecentAction,
   checkActionExists,
   getRecentActions,
-} from "../../../../../Actions/actions/utils";
+} from "../utils";
 
 const router = Router();
 

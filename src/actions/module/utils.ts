@@ -62,7 +62,9 @@ export const getRecentActions = () => {
   return jsonCopy;
 };
 
-export const getActionFromActionString = (actionString: string) => {
+export const getActionFromActionString = (
+  actionString: string
+): Function | null => {
   const [action, subaction = "default"] = actionString.split(".");
 
   const realAction = mappings[action]?.[subaction] as Mappings;
@@ -71,5 +73,9 @@ export const getActionFromActionString = (actionString: string) => {
     return null;
   }
 
-  return realAction;
+  if (typeof realAction === "function") {
+    return realAction;
+  }
+
+  return null;
 };
