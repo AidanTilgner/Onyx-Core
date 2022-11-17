@@ -1,12 +1,15 @@
 import { Router } from "express";
 import path from "path";
 import { config } from "dotenv";
-import { initDB } from "./module/utils/surrealdb";
-import { initDefaultUser } from "./module/utils/auth";
 import UsersRouter from "./module/routes/users";
 import AuthRouter from "./module/routes/auth";
+import PeopleInterface from "./interface";
 
 const router = Router();
+
+const people = new PeopleInterface();
+
+const { initDB, initDefaultUser } = people;
 
 config();
 initDB().then((res) => {
