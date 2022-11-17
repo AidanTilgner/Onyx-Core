@@ -1,5 +1,5 @@
 import Interfacer from "interpretation/interfacer";
-import type { Entity } from "./index.d";
+import type { Entity } from "../index.d";
 
 const interfacer = new Interfacer();
 const Actions = interfacer.actionsInterface;

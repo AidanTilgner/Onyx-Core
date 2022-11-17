@@ -1,5 +1,5 @@
-import { NLUResponse } from "./index.d";
-import mappings from "./index";
+import { ActionResponse, NLUResponse } from "./index.d";
+import mappings from "./mappings";
 import { getActionFromActionString } from "./utils";
 
 export const parseAndUseNLU = async (nlu: NLUResponse) => {
@@ -97,4 +97,37 @@ export const parseAndUseNLU = async (nlu: NLUResponse) => {
       error: "There was an error parsing the NLU.",
     };
   }
+};
+
+export const performAction = async (
+  actionString: string,
+  args: any[]
+): Promise<ActionResponse | null> => {
+  try {
+    const [action, subaction = "default"] = actionString.split(".");
+    const actionFunction = mappings[action]?.[subaction];
+    if (!actionFunction) {
+      return null;
+    }
+    return await actionFunction(args);
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+export const performBatchActions = async (
+  actions: {
+    action: string;
+    args: any[];
+  }[]
+) => {
+  const responses: {
+    [action: string]: any;
+  } = {};
+  for (let i = 0; i < actions.length; i++) {
+    const { action, args } = actions[i];
+    responses[action] = await performAction(action, args);
+  }
+  return responses;
 };

@@ -76,3 +76,17 @@ export type MetaData = {
     vote: string;
   };
 };
+
+export interface NLUResponse {
+  intents: string[];
+  actions: string[];
+  nlu_response: string;
+  responses: string[];
+  entities: Entity[];
+  classifications: { intent: string; score: number }[];
+  custom_entities: { [action: string]: any };
+  initial_input: string;
+  split_input: string[];
+  initial_actions: string[];
+  metaData: MetaData[];
+}

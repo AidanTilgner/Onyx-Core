@@ -3,15 +3,15 @@ import exceptionMappings from "./types/exceptions";
 import stateMappings from "./types/state";
 import { recommendClothingMappings } from "./types/clothing";
 import { parseAndUseNLU } from "./dispatch";
+import { ActionResponse } from "./index";
 
 export interface Mappings {
-  // can be a recursive [key: string]: Mappings | Function
-  [key: string]: Mappings | Function;
+  // can return a function with the type of action_response
+  [key: string]: Mappings | ((...args: any[]) => Promise<ActionResponse>);
 }
 
 const mappings: Mappings = {
   weather: weatherMappings,
-  parse_and_use_nlu: { default: parseAndUseNLU },
   state: stateMappings,
   exception: exceptionMappings,
   recommend_clothing: recommendClothingMappings,
