@@ -7,10 +7,7 @@ const thirdPartyApi = interfacer.thirdPartiesInterface.thirdPartyApi;
 
 const getWeather = async (...args: any[]): Promise<ActionResponse> => {
   try {
-    let { city } = args[0];
-    if (!city) {
-      city = "Salem,OR,US";
-    }
+    const city = args[0].city || "Salem,OR,US";
     const { data } = await thirdPartyApi.get(`/weather?location=${city}`);
     if (data.error) {
       return {
@@ -43,10 +40,7 @@ const getWeather = async (...args: any[]): Promise<ActionResponse> => {
 
 const getTemperature = async (...args: any[]): Promise<ActionResponse> => {
   try {
-    let { city } = args[0];
-    if (!city) {
-      city = "Salem,OR,US";
-    }
+    const city = args[0].city || "Salem,OR,US";
     const { data } = await thirdPartyApi.get(`/weather?location=${city}`);
     if (data.error) {
       return {

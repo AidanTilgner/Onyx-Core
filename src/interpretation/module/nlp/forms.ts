@@ -1,5 +1,7 @@
 import Interfacer from "interpretation/interfacer";
 import type { Entity } from "../index.d";
+import { v4 as uuid4 } from "uuid";
+import { ExpectedEntities } from "../../../actions/module/index";
 
 const interfacer = new Interfacer();
 const Actions = interfacer.actionsInterface;
@@ -51,22 +53,7 @@ export const getActionExpectedEntities = async (
   }[]
 ): Promise<ActionExpectedEntities> => {
   try {
-    const { data } = await Actions.getActionMetadata(act);
-    if (data.error) {
-      return {
-        found: [],
-        missing: [],
-        has_custom_entities: false,
-        expected_entities: [],
-      };
-    }
-    const {
-      response: { expected_entities },
-    } = data as {
-      response: {
-        expected_entities: { type: string; custom_query: string }[];
-      };
-    };
+    const { expected_entities } = await Actions.getActionMetadata(act);
     if (!expected_entities) {
       return {
         found: [],

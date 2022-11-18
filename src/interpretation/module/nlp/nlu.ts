@@ -14,9 +14,9 @@ import {
   splitInputBySentence,
 } from "./utils";
 
-export const unstable_getNLUData = async (
-  session_id: string,
+export const getNLUData = async (
   input: string,
+  session_id: string,
   lang?: string
 ): Promise<NLUResponse> => {
   const language = lang || nlu_config.defaultLanguage;
@@ -176,13 +176,3 @@ export const unstable_getNLUDataWithoutSession = async (
     metaData: nluArray,
   };
 };
-
-interface NewNLUResponse {
-  intents: string[];
-  actions: string[];
-  mappings: {
-    intent: string;
-    action: string;
-    response: string;
-  }[];
-}

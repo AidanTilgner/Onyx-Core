@@ -84,3 +84,8 @@ export interface ActionResponse {
   data?: any;
   error?: any;
 }
+
+export type ExpectedEntities = {
+  type: string;
+  custom_query: string;
+}[];

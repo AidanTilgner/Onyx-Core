@@ -2,7 +2,7 @@ import mappings, { Mappings } from "./mappings";
 import action_metadata_mappings from "./documents/action_metadata_mappings.json";
 import recent_actions from "./documents/recent_actions.json";
 import { writeFileSync } from "fs";
-import { ActionResponse } from "./index.d";
+import type { ActionResponse, ExpectedEntities } from "./index.d";
 
 export const checkActionExists = (act: string) => {
   const [action, subaction = "default"] = act.split(".");
@@ -24,13 +24,15 @@ export const getAction = (act: string) => {
   return null;
 };
 
-export const getActionMetadata = (act: string) => {
+export const getActionMetadata = async (act: string) => {
   const [action, subaction = "default"] = act.split(".");
   const jsonCopy = action_metadata_mappings as {
     [key: string]: { [key: string]: any };
   };
 
-  return jsonCopy[action]?.[subaction];
+  return jsonCopy[action]?.[subaction] as {
+    expected_entities: ExpectedEntities;
+  };
 };
 
 export const addRecentAction = (act: string) => {

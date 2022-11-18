@@ -84,7 +84,7 @@ export interface NLUResponse {
   responses: string[];
   entities: Entity[];
   classifications: { intent: string; score: number }[];
-  custom_entities: { [action: string]: any };
+  custom_entities: { [action: string]: string | number };
   initial_input: string;
   split_input: string[];
   initial_actions: string[];
