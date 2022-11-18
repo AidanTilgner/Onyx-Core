@@ -8,7 +8,7 @@ import {
   getResponse,
 } from "./module/nlp/utils";
 import {
-  unstable_getNLUData,
+  getNLUData,
   unstable_getNLUDataWithoutSession,
 } from "./module/nlp/nlu";
 
@@ -20,7 +20,7 @@ class InterpretationInterface extends Interface {
   public getAction: typeof getAction = getAction;
   public getIntentAndAction: typeof getIntentAndAction = getIntentAndAction;
   public getResponse: typeof getResponse = getResponse;
-  public getNLUData: typeof unstable_getNLUData = unstable_getNLUData;
+  public getNLUData: typeof getNLUData = getNLUData;
   public getNLUDataWithoutSession: typeof unstable_getNLUDataWithoutSession =
     unstable_getNLUDataWithoutSession;
 

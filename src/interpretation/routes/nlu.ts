@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { unstable_getNLUData } from "../module/nlp/nlu";
+import { getNLUData } from "../module/nlp/nlu";
 
 const router = Router();
 
@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
   const { text, language = "en" } = req.body;
   const session_id =
     req.body.session_id || req.query.session_id || generateRandomSessionId();
-  const nlu = await unstable_getNLUData(session_id, text, language);
+  const nlu = await getNLUData(session_id, text, language);
   res.send({
     message: "Successfully classified input",
     nlu: nlu,
@@ -25,7 +25,7 @@ router.post("/unstable", async (req, res) => {
   const { text, language } = req.body;
   const session_id =
     req.body.session_id || req.query.session_id || generateRandomSessionId();
-  const nlu = await unstable_getNLUData(session_id, text, language || "en");
+  const nlu = await getNLUData(session_id, text, language || "en");
   res.send({
     message: "Successfully classified input",
     nlu: nlu,
