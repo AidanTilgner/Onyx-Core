@@ -1,5 +1,10 @@
 import { Interface } from "docs/interfaces";
-import { getActionMetadata, getActionFromActionString } from "./module/utils";
+import {
+  getActionMetadata,
+  getActionFromActionString,
+  getSuccessfulActions,
+  getFailedActions,
+} from "./module/utils";
 import ActionMappings from "./module/mappings";
 import {
   parseAndUseNLU,
@@ -13,6 +18,8 @@ class ActionsInterface extends Interface {
   public parseAndUseNLU = parseAndUseNLU;
   public performAction = performAction;
   public performBatchActions = performBatchActions;
+  public getSuccessfulActions = getSuccessfulActions;
+  public getFailedActions = getFailedActions;
 
   constructor() {
     super("Actions");

@@ -7,7 +7,7 @@ import intents_json from "./documents/intents.json";
 import existing_actions from "./documents/existing_actions.json";
 import existing_actions_without_response from "./documents/existing_actions_without_response.json";
 
-import { getAction, getResponse } from "./nlp";
+import { getAction, getResponse } from "./nlp/utils";
 
 // TODO: Get this from the path instead of hardcoding it
 const pathToLocal = "src/interpretation/module/documents";

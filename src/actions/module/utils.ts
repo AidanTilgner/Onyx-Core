@@ -2,6 +2,7 @@ import mappings, { Mappings } from "./mappings";
 import action_metadata_mappings from "./documents/action_metadata_mappings.json";
 import recent_actions from "./documents/recent_actions.json";
 import { writeFileSync } from "fs";
+import { ActionResponse } from "./index.d";
 
 export const checkActionExists = (act: string) => {
   const [action, subaction = "default"] = act.split(".");
@@ -78,4 +79,28 @@ export const getActionFromActionString = (
   }
 
   return null;
+};
+
+export const getSuccessfulActions = (responses: {
+  [action: string]: ActionResponse;
+}) => {
+  const actions: string[] = [];
+  for (const action in responses) {
+    if (responses[action].success) {
+      actions.push(action);
+    }
+  }
+  return actions;
+};
+
+export const getFailedActions = (responses: {
+  [action: string]: ActionResponse;
+}) => {
+  const actions: string[] = [];
+  for (const action in responses) {
+    if (!responses[action].success) {
+      actions.push(action);
+    }
+  }
+  return actions;
 };

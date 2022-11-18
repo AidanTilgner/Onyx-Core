@@ -1,16 +1,16 @@
 import { Interface } from "docs/interfaces";
 import { MetaData } from "./module/index.d";
+import { initModel, trainModel, testModel } from "./module/nlp";
 import {
-  initModel,
-  trainModel,
-  testModel,
   getIntent,
   getAction,
   getIntentAndAction,
   getResponse,
+} from "./module/nlp/utils";
+import {
   unstable_getNLUData,
   unstable_getNLUDataWithoutSession,
-} from "./module/nlp";
+} from "./module/nlp/nlu";
 
 class InterpretationInterface extends Interface {
   private initModel: typeof initModel = initModel;

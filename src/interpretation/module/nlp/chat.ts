@@ -1,7 +1,7 @@
 import { unstable_getNLUData, unstable_getNLUDataWithoutSession } from "./nlu";
+import { condenseResponses, parseBatchActionResponses } from "./utils";
 import { NLUResponse } from "../index.d";
 import InterpretationInterfacer from "interpretation/interfacer";
-import { performBatchActions } from "../../../actions/module/dispatch";
 
 const interfacer = new InterpretationInterfacer();
 const actionsInterface = interfacer.actionsInterface;
@@ -14,7 +14,7 @@ export const getSimpleResponse = async (text: string, session_id?: string) => {
     data = await unstable_getNLUData(session_id, text);
   }
 
-  const { actions, intents, custom_entities } = data;
+  const { actions, intents, responses, custom_entities } = data;
 
   const batchActions = actions.map((act) => {
     return {
@@ -25,9 +25,21 @@ export const getSimpleResponse = async (text: string, session_id?: string) => {
   const actionResponses = await actionsInterface.performBatchActions(
     batchActions
   );
+  const parsedResponses = parseBatchActionResponses(actionResponses);
+  const performedActions =
+    actionsInterface.getSuccessfulActions(actionResponses);
+  const failedActions = actionsInterface.getFailedActions(actionResponses);
 
-  return {
-    data,
-    actionResponses,
+  const finalResponse = condenseResponses(
+    [...responses, ...parsedResponses],
+    session_id
+  );
+
+  const toSend = {
+    response: finalResponse,
+    actions_performed: performedActions,
+    actions_failed: failedActions,
   };
+
+  return toSend;
 };

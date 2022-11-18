@@ -86,7 +86,7 @@ export const unstable_getNLUData = async (
   const responses = useableActions.map(
     (act) => getResponse(act, entities).response
   );
-  const response = condenseResponses(session_id, responses);
+  const response = condenseResponses(responses, session_id);
   return {
     intents,
     actions: useableActions,

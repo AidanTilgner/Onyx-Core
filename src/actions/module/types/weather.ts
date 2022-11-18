@@ -17,6 +17,7 @@ const getWeather = async (...args: any[]): Promise<ActionResponse> => {
         error: data.error,
         action_performed: "weather.default",
         action_response: "error",
+        success: false,
       };
     }
     const formattedCity = city.split(",")[0];
@@ -27,6 +28,7 @@ const getWeather = async (...args: any[]): Promise<ActionResponse> => {
       data: data,
       action_response: message,
       action_performed: "weather.default",
+      success: true,
     };
   } catch (err) {
     console.log("Error: ", err);
@@ -34,6 +36,7 @@ const getWeather = async (...args: any[]): Promise<ActionResponse> => {
       error: "There was an issue getting the weather for that city.",
       action_performed: "weather.default",
       action_response: "error",
+      success: false,
     };
   }
 };
@@ -50,6 +53,7 @@ const getTemperature = async (...args: any[]): Promise<ActionResponse> => {
         error: data.error,
         action_performed: "weather.temperature",
         action_response: "error",
+        success: false,
       };
     }
     const formattedCity = city.split(",")[0];
@@ -59,6 +63,7 @@ const getTemperature = async (...args: any[]): Promise<ActionResponse> => {
       data: data,
       action_response: message,
       action_performed: "weather.temperature",
+      success: true,
     };
   } catch (err) {
     console.log("Error: ", err);
@@ -66,6 +71,7 @@ const getTemperature = async (...args: any[]): Promise<ActionResponse> => {
       error: "There was an issue getting the weather for that city.",
       action_performed: "weather.temperature",
       action_response: "error",
+      success: false,
     };
   }
 };

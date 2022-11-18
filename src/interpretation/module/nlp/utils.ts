@@ -5,9 +5,13 @@ import { spellCheckText } from "../similarity/spellcheck";
 import intent_to_action_json from "../documents/intent_to_action.json";
 import action_to_response_json from "../documents/action_to_response.json";
 import { Entity } from "../index.d";
+import { ActionResponse } from "../index.d";
 
-export const condenseResponses = (session_id: string, responses: string[]) => {
-  const { custom_queries } = getSessionQuestions(session_id);
+export const condenseResponses = (responses: string[], session_id?: string) => {
+  let custom_queries: string[] | null = null;
+  if (session_id) {
+    custom_queries = getSessionQuestions(session_id).custom_queries;
+  }
   let response = "";
 
   responses.forEach((res) => {
@@ -17,7 +21,7 @@ export const condenseResponses = (session_id: string, responses: string[]) => {
     response += response.length ? ". " + res : res;
   });
 
-  custom_queries.forEach((q) => {
+  custom_queries?.forEach((q) => {
     response += response.length ? ". " + q : q;
   });
 
@@ -192,4 +196,14 @@ export const getResponse = (act: string, entities?: Entity[] | null) => {
   }
   const response = responses[Math.floor(Math.random() * responses.length)];
   return { response, responses };
+};
+
+export const parseBatchActionResponses = (responses: {
+  [action: string]: ActionResponse;
+}) => {
+  const parsedResponses: string[] = [];
+  Object.entries(responses).forEach(([action, res]) => {
+    parsedResponses.push(res.action_response);
+  });
+  return parsedResponses;
 };

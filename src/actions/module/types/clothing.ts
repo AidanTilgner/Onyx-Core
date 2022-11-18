@@ -4,6 +4,7 @@ export const recommendClothing = async (): Promise<ActionResponse> => {
     return {
       action_response: "I recommend wearing a t-shirt and shorts.",
       action_performed: "recommend_clothing.default",
+      success: true,
     };
   } catch (err) {
     console.log("Error: ", err);
@@ -12,6 +13,7 @@ export const recommendClothing = async (): Promise<ActionResponse> => {
         "I guess I'm not exactly sure what you should wear today.",
       error: "There was an issue picking your clothes today.",
       action_performed: "recommend_clothing.default",
+      success: false,
     };
   }
 };
@@ -26,12 +28,14 @@ export const recommendClothingForItem = async (
         action_response:
           "You should wear a small black belt with a golden buckle.",
         action_performed: "recommend_clothing.dress",
+        success: true,
       };
     }
 
     return {
       action_response: "You should wear some cute shoes.",
       action_performed: "recommend_clothing.shoes",
+      success: true,
     };
   } catch (err) {
     console.log("Error: ", err);
@@ -40,6 +44,7 @@ export const recommendClothingForItem = async (
         "I guess I'm not exactly sure what you should wear today.",
       error: "There was an issue picking your clothes today.",
       action_performed: "recommend_clothing.default",
+      success: false,
     };
   }
 };

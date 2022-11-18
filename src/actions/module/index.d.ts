@@ -80,6 +80,7 @@ export interface NLUResponse {
 export interface ActionResponse {
   action_performed: string;
   action_response: string;
+  success: boolean;
   data?: any;
   error?: any;
 }

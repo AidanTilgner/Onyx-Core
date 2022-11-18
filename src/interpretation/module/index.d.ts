@@ -90,3 +90,11 @@ export interface NLUResponse {
   initial_actions: string[];
   metaData: MetaData[];
 }
+
+export interface ActionResponse {
+  action_performed: string;
+  action_response: string;
+  success: boolean;
+  data?: any;
+  error?: any;
+}

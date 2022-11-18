@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getIntentAndAction, unstable_getNLUData } from "../module/nlp";
+import { unstable_getNLUData } from "../module/nlp/nlu";
 
 const router = Router();
 

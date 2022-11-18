@@ -123,11 +123,15 @@ export const performBatchActions = async (
   }[]
 ) => {
   const responses: {
-    [action: string]: any;
+    [action: string]: ActionResponse;
   } = {};
   for (let i = 0; i < actions.length; i++) {
     const { action, args } = actions[i];
-    responses[action] = await performAction(action, args);
+    const actionRes = await performAction(action, args);
+    if (!actionRes) {
+      continue;
+    }
+    responses[action] = actionRes;
   }
   return responses;
 };
