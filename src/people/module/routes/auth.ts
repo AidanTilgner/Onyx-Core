@@ -21,6 +21,7 @@ router.post("/refresh", async (req, res) => {
 
 router.post("/check", async (req, res) => {
   try {
+    console.log("Checking token");
     const token =
       req.body.token || req.headers["x-access-token"] || req.query.token;
     if (!token) {

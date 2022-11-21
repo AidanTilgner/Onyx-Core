@@ -29,9 +29,17 @@ export const initIO = (server: httpServer) => {
 };
 
 export const emitMessage = (key: string, message: string, ...args: any[]) => {
+  if (!io) {
+    console.error("Socket.io is not initialized");
+    return;
+  }
   return io.emit(key, message, ...args);
 };
 
 export const emitArgs = (key: string, ...args: any[]) => {
+  if (!io) {
+    console.error("Socket.io is not initialized");
+    return;
+  }
   return io.emit(key, ...args);
 };
