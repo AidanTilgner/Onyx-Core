@@ -1,5 +1,5 @@
-import { sql } from "people/module/utils/db";
-import { Model, DataTypes } from "sequelize";
+import { db } from "people/module/utils/db";
+import { Model, DataTypes, Sequelize } from "sequelize";
 
 class Token extends Model {
   declare id: number;
@@ -7,8 +7,8 @@ class Token extends Model {
   declare key: string;
 }
 
-Token.init(
-  {
+export const definition = {
+  columns: {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
@@ -23,12 +23,19 @@ Token.init(
       allowNull: false,
     },
   },
-  {
+  config: {
     tableName: "reset_token",
-    sequelize: sql,
     modelName: "Token",
     timestamps: true,
-  }
-);
+  },
+};
+
+export const initTokens = async () => {
+  Token.init(definition.columns, {
+    ...definition.config,
+    sequelize: db.sequelize,
+    freezeTableName: true,
+  });
+};
 
 export default Token;

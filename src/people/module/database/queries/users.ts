@@ -38,11 +38,18 @@ export const addUser = async (user: {
       };
     }
     const usePassword = password || generateRandomPassword();
-    const newUser = await User.create({
+    console.log("Got user", {
       username: username,
       role: role,
       password: await hashPassword(usePassword),
     });
+    const newUser = await User.create({
+      username: username,
+      role: role,
+      password: await hashPassword(usePassword),
+      disabled: false,
+    });
+    console.log("New user", newUser);
 
     return { user: newUser, generated_password: usePassword };
   } catch (err) {
