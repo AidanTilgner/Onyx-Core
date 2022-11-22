@@ -9,12 +9,13 @@ const router = Router();
 
 const people = new PeopleInterface();
 
-const { initDB, initDefaultUser } = people;
+const { initDB, initDefaultUser, initMariadb } = people;
 
 config();
 initDB().then((res) => {
   initDefaultUser();
 });
+initMariadb();
 
 router.use("/api/auth", AuthRouter);
 router.use("/api/users", UsersRouter);
