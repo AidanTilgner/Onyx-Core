@@ -1,93 +1,92 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  Sequelize,
+  InferAttributes,
+  InferCreationAttributes,
+} from "sequelize";
 import bc from "bcrypt";
 import { db } from "../../utils/db";
 
-class User extends Model {
-  declare id: number;
+const definition = {
+  columns: {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    username: {
+      type: new DataTypes.STRING(128),
+      allowNull: false,
+    },
+    password: {
+      type: new DataTypes.STRING(128),
+      allowNull: false,
+    },
+    role: {
+      type: new DataTypes.STRING(128),
+      allowNull: false,
+    },
+    disabled: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    email: {
+      type: new DataTypes.STRING(128),
+      allowNull: true,
+    },
+    phone_number: {
+      type: new DataTypes.STRING(128),
+      allowNull: true,
+    },
+    interests: {
+      type: new DataTypes.STRING(128),
+      allowNull: true,
+    },
+    first_name: {
+      type: new DataTypes.STRING(128),
+      allowNull: true,
+    },
+    last_name: {
+      type: new DataTypes.STRING(128),
+      allowNull: true,
+    },
+  },
+  config: {
+    tableName: "users",
+    modelName: "User",
+    timestamps: true,
+    freezeTableName: true,
+  },
+};
+export default class User extends Model<
+  InferAttributes<User>,
+  InferCreationAttributes<User>
+> {
   declare username: string;
   declare password: string;
   declare role: string;
   declare disabled: boolean;
-  declare email?: string;
-  declare phone_number?: string;
-  declare interests?: string;
-  declare first_name?: string;
-  declare last_name?: string;
-
-  constructor() {
-    super();
-  }
+  declare email: string | null;
+  declare phone_number: string | null;
+  declare interests: string | null;
+  declare first_name: string | null;
+  declare last_name: string | null;
 
   public comparePassword = async (password: string): Promise<boolean> => {
     return await bc.compare(password, this.password);
   };
 
-  public getPublic = (): User => {
-    const { password, ...publicUser } = this.get();
-    return publicUser as User;
+  public getPublic = (): Partial<User> => {
+    const { password, ...publicUser } = this.toJSON();
+    return publicUser;
   };
 }
 
 export const initUsers = async () => {
-  User.init(
-    {
-      id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      username: {
-        type: new DataTypes.STRING(128),
-        allowNull: false,
-      },
-      password: {
-        type: new DataTypes.STRING(128),
-        allowNull: false,
-      },
-      role: {
-        type: new DataTypes.STRING(128),
-        allowNull: false,
-      },
-      disabled: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-      email: {
-        type: new DataTypes.STRING(128),
-        allowNull: true,
-      },
-      phone_number: {
-        type: new DataTypes.STRING(128),
-        allowNull: true,
-      },
-      first_name: {
-        type: new DataTypes.STRING(128),
-        allowNull: true,
-      },
-      last_name: {
-        type: new DataTypes.STRING(128),
-        allowNull: true,
-      },
-      interests: {
-        type: new DataTypes.STRING(128),
-        allowNull: true,
-      },
-    },
-    {
-      tableName: "users",
-      sequelize: db.sequelize,
-      modelName: "User",
-      timestamps: true,
-      freezeTableName: true,
-    }
-  );
-  User.create({
-    username: "admin",
-    password: await bc.hash("admin", 10),
-    role: "superuser",
-    disabled: false,
+  const user = User.init(definition.columns, {
+    ...definition.config,
+    sequelize: db.sequelize,
   });
+  return user;
 };
-
-export default User;

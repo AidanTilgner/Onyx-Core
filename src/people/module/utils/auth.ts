@@ -2,7 +2,7 @@ import { Role, AllowedRoles } from "../interfaces/roles";
 import { getUser, addUser } from "../database/queries/users";
 import { writeFileSync } from "fs";
 import { config } from "dotenv";
-config({ path: "../.env" });
+config();
 
 export const roles: {
   [key in AllowedRoles]: Role;

@@ -38,18 +38,20 @@ export const addUser = async (user: {
       };
     }
     const usePassword = password || generateRandomPassword();
-    console.log("Got user", {
-      username: username,
-      role: role,
-      password: await hashPassword(usePassword),
-    });
+    const hashed = await hashPassword(usePassword);
+    if (!hashed) {
+      return {
+        error: "Error hashing password",
+        user: null,
+        generated_password: null,
+      };
+    }
     const newUser = await User.create({
       username: username,
       role: role,
-      password: await hashPassword(usePassword),
+      password: hashed,
       disabled: false,
     });
-    console.log("New user", newUser);
 
     return { user: newUser, generated_password: usePassword };
   } catch (err) {

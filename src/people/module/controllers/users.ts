@@ -8,7 +8,7 @@ import {
   addRefreshToken,
   getRefreshToken,
   deleteRefreshToken,
-} from "../database/queries/tokens-sdb";
+} from "../database/queries/tokens";
 import {
   getUser as getDBUser,
   addUser as addDBUser,
@@ -95,7 +95,7 @@ export const signInUser = async (username: string, password: string) => {
       };
     }
 
-    const access_token = generateToken(user);
+    const access_token = generateToken((user as User).getPublic());
     await deleteRefreshToken(username);
     const refresh_token = generateRefreshToken(
       { access_token },
@@ -134,27 +134,9 @@ export const refreshUser = async (refresh_token: string, username: string) => {
     }
 
     const response = await getRefreshToken(username);
-    const { result, error, message } = response;
+    const result = response;
 
     if (!result) {
-      return {
-        error,
-        message,
-        validated: false,
-      };
-    }
-
-    const { value: token } = result;
-
-    if (error) {
-      return {
-        error,
-        message,
-        validated: false,
-      };
-    }
-
-    if (!token) {
       return {
         error: "Invalid refresh token",
         message: "Invalid refresh token",
@@ -196,10 +178,10 @@ export const refreshUser = async (refresh_token: string, username: string) => {
 
 export const logoutUser = async (username: string) => {
   try {
-    const { error } = await deleteRefreshToken(username);
-    if (error) {
+    const deleted = await deleteRefreshToken(username);
+    if (!deleted) {
       return {
-        error,
+        error: "Error logging out user",
         message: "There was an error logging out the user",
       };
     }

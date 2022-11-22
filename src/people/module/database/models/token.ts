@@ -1,11 +1,11 @@
 import { db } from "people/module/utils/db";
-import { Model, DataTypes, Sequelize } from "sequelize";
-
-class Token extends Model {
-  declare id: number;
-  declare value: string;
-  declare key: string;
-}
+import {
+  Model,
+  DataTypes,
+  Sequelize,
+  InferAttributes,
+  InferCreationAttributes,
+} from "sequelize";
 
 export const definition = {
   columns: {
@@ -15,7 +15,7 @@ export const definition = {
       primaryKey: true,
     },
     value: {
-      type: new DataTypes.STRING(128),
+      type: new DataTypes.TEXT("medium"),
       allowNull: false,
     },
     key: {
@@ -24,18 +24,25 @@ export const definition = {
     },
   },
   config: {
-    tableName: "reset_token",
+    tableName: "reset_tokens",
     modelName: "Token",
     timestamps: true,
+    freezeTableName: true,
   },
 };
 
+export default class Token extends Model<
+  InferAttributes<Token>,
+  InferCreationAttributes<Token>
+> {
+  declare value: string;
+  declare key: string;
+}
+
 export const initTokens = async () => {
-  Token.init(definition.columns, {
+  const token = Token.init(definition.columns, {
     ...definition.config,
     sequelize: db.sequelize,
-    freezeTableName: true,
   });
+  return token;
 };
-
-export default Token;

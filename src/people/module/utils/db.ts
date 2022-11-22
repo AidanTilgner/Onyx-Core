@@ -1,13 +1,18 @@
-import { Sequelize } from "sequelize";
+import { Model, Sequelize } from "sequelize";
 import { config } from "dotenv";
+import { initUsers } from "../database/models/user";
+import { initTokens } from "../database/models/token";
 
 config();
 
-export let sql: Sequelize;
-
-export const initDB = async () => {
-  // setup default mariadb connection
-  sql = new Sequelize({
+export const db: {
+  sequelize: Sequelize;
+  models: {
+    users: Model | any;
+    tokens: Model | any;
+  };
+} = {
+  sequelize: new Sequelize({
     dialect: "mariadb",
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT || "3306"),
@@ -15,13 +20,26 @@ export const initDB = async () => {
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
     logging: false,
-  });
+    sync: { force: true },
+  }),
+  models: {
+    users: null,
+    tokens: null,
+  },
+};
 
-  // test connection
-  try {
-    await sql.authenticate();
-    console.info("Connection has been established successfully.");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
+export const initDB = async () => {
+  await db.sequelize.authenticate();
+  await initAndSyncTables();
+};
+
+export const initAndSyncTables = async () => {
+  await initTokens().then((token) => {
+    token.sync();
+    db.models.tokens = token;
+  });
+  await initUsers().then((user) => {
+    user.sync();
+    db.models.users = user;
+  });
 };
