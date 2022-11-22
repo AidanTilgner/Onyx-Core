@@ -28,7 +28,7 @@ const getWeather = async (...args: any[]): Promise<ActionResponse> => {
       success: true,
     };
   } catch (err) {
-    console.log("Error: ", err);
+    console.error("Error: ", err);
     return {
       error: "There was an issue getting the weather for that city.",
       action_performed: "weather.default",
@@ -60,7 +60,7 @@ const getTemperature = async (...args: any[]): Promise<ActionResponse> => {
       success: true,
     };
   } catch (err) {
-    console.log("Error: ", err);
+    console.error("Error: ", err);
     return {
       error: "There was an issue getting the weather for that city.",
       action_performed: "weather.temperature",

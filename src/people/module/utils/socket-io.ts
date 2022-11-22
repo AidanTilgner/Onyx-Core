@@ -17,7 +17,7 @@ export const initIO = (server: httpServer) => {
   io = new SocketIOServer(server);
 
   io.on("connection", (socket) => {
-    console.log("A user connected");
+    console.info("A user connected");
     socket.emit(
       "message",
       "Hello there. Socket.io is successfully initilized and connected."

@@ -92,7 +92,7 @@ export const parseAndUseNLU = async (nlu: NLUResponse) => {
 
     return toSend;
   } catch (err) {
-    console.log("Error parsing NLU:", err);
+    console.error("Error parsing NLU:", err);
     return {
       error: "There was an error parsing the NLU.",
     };
@@ -111,7 +111,7 @@ export const performAction = async (
     }
     return await actionFunction(args);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return null;
   }
 };

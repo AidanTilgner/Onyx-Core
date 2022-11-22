@@ -11,8 +11,6 @@ export const getSimpleResponse = async (text: string, session_id: string) => {
 
   const { actions, intents, responses, custom_entities, entities } = data;
 
-  console.log("DATA", data);
-
   const batchActions = actions.map((act) => {
     return {
       action: act,

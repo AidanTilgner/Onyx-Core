@@ -126,7 +126,6 @@ export const unstable_getNLUDataWithoutSession = async (
     intents.push(intent);
     inpClassifications.forEach((cl) => {
       if (cl.score > 0.5) {
-        console.log("Pushing Classification: ", cl);
         classifications.push(cl);
       }
     });

@@ -14,7 +14,7 @@ const db = new Surreal(db_url);
 
 export async function initDB() {
   try {
-    console.log("Initializing database...");
+    console.info("Initializing database...");
     if (!db_user || !db_pass) {
       throw new Error("DB_USERNAME or DB_PASSWORD not set");
     }

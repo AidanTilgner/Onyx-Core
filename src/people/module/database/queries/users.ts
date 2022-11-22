@@ -1,51 +1,55 @@
-import db from "../../utils/surrealdb";
-import { generateRandomPassword, hashPassword } from "../../utils/crypto";
-import { User } from "../../interfaces/users";
-import { AllowedRoles } from "../../interfaces/roles";
+import User from "../models/user";
+import {
+  generateRandomPassword,
+  hashPassword,
+} from "people/module/utils/crypto";
 
-export const addUser = async (
-  username: string,
-  role: AllowedRoles
-): Promise<{
-  user?: User;
-  generated_password?: string;
-  error?: any;
+export const addUser = async (user: {
+  username: string;
+  role: string;
+  email?: string;
+  password?: string;
+}): Promise<{
+  user: User | null;
+  generated_password: string | null;
+  error?: string | any;
 }> => {
   try {
+    const { username, role, password } = user;
     if (!username) {
       return {
         error: "Username is required",
+        user: null,
+        generated_password: null,
       };
     }
     if (!role) {
-      role = "user";
+      return {
+        error: "Role is required",
+        user: null,
+        generated_password: null,
+      };
     }
     if (await checkUserExists(username)) {
       return {
         error: "User already exists",
+        user: null,
+        generated_password: null,
       };
     }
-    const randomPassword = generateRandomPassword();
-    const [result] = await db.query(
-      "CREATE users SET username = $username, password = $password, role = $role",
-      {
-        username: username,
-        password: await hashPassword(randomPassword),
-        role: role,
-      }
-    );
-    if (!result.result) {
-      return {
-        error: "There was an error adding the user",
-      };
-    }
+    const usePassword = password || generateRandomPassword();
+    const newUser = await User.create({
+      username: username,
+      role: role,
+      password: await hashPassword(usePassword),
+    });
 
-    const user = result.result[0] as User;
-
-    return { user, generated_password: randomPassword };
+    return { user: newUser, generated_password: usePassword };
   } catch (err) {
     console.error(err);
     return {
+      user: null,
+      generated_password: null,
       error: err,
     };
   }
@@ -56,23 +60,14 @@ export const checkUserExists = async (username: string): Promise<boolean> => {
     if (!username) {
       throw new Error("Username not provided");
     }
-    const [result] = await db.query(
-      "SELECT username FROM users WHERE username = $username",
-      {
+    const user = await User.findOne({
+      where: {
         username: username,
-      }
-    );
-
-    if (!result.result) {
-      return false;
-    }
-
-    const users = result.result as Array<User>;
-
-    if (users.length > 0) {
+      },
+    });
+    if (user) {
       return true;
     }
-
     return false;
   } catch (err) {
     console.error(err);
@@ -83,163 +78,144 @@ export const checkUserExists = async (username: string): Promise<boolean> => {
 export const getUser = async (
   username: string,
   withPassword?: boolean
-): Promise<{ user?: Partial<User>; error?: any }> => {
+): Promise<Partial<User> | null> => {
   try {
     if (!username) {
-      return {
-        error: "Username is required",
-      };
+      throw new Error("Username not provided");
     }
-
-    const [result] = (await db.query(
-      "SELECT * FROM users WHERE username = $username",
-      {
+    const user = await User.findOne({
+      where: {
         username: username,
-      }
-    )) as Array<{ result: Array<User> }>;
-
-    if ((result.result as any[])?.length === 0) {
-      return {
-        error: "User not found",
-      };
+      },
+    });
+    if (!user) {
+      return null;
     }
-
-    const user = result.result[0] as User;
-
-    const userToSend: Partial<User> = user;
-    if (!withPassword) {
-      delete userToSend.password;
+    if (withPassword) {
+      return user;
     }
-
-    return { user: userToSend };
+    return user.getPublic();
   } catch (err) {
     console.error(err);
-    return {
-      error: err,
-    };
+    return null;
   }
 };
 
-export const deleteUser = async (username: string) => {
+export const deleteUser = async (username: string): Promise<boolean> => {
   try {
     if (!username) {
-      return {
-        error: "Username is required",
-        message: "Username is required",
-      };
+      throw new Error("Username not provided");
     }
-
-    const [result] = await db.query(
-      "DELETE FROM users WHERE username = $username",
-      {
+    const user = await User.findOne({
+      where: {
         username: username,
-      }
-    );
-
-    return {
-      result: result.result,
-      message: "User deleted successfully",
-    };
+      },
+    });
+    if (user) {
+      await user.destroy();
+      return true;
+    }
+    return false;
   } catch (err) {
     console.error(err);
-    return {
-      error: err,
-      message: "There was an error deleting the user",
-    };
+    return false;
   }
 };
 
-export const updateRole = async (username: string, role: string) => {
+export const updateUser = async (
+  username: string,
+  user: Partial<User>
+): Promise<Partial<User> | null> => {
   try {
     if (!username) {
-      return {
-        error: "Username is required",
-        message: "Username is required",
-      };
+      throw new Error("Username not provided");
     }
-    if (!role) {
-      return {
-        error: "Role is required",
-        message: "Role is required",
-      };
-    }
-
-    const [result] = await db.query(
-      "UPDATE users SET role = $role WHERE username = $username",
-      {
+    const existingUser = await User.findOne({
+      where: {
         username: username,
+      },
+    });
+    if (existingUser) {
+      await existingUser.update(user);
+      return existingUser;
+    }
+    return null;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
+export const updateRole = async (
+  username: string,
+  role: string
+): Promise<Partial<User> | null> => {
+  try {
+    if (!username) {
+      throw new Error("Username not provided");
+    }
+    const existingUser = await User.findOne({
+      where: {
+        username: username,
+      },
+    });
+    if (existingUser) {
+      await existingUser.update({ role: role });
+      return existingUser;
+    }
+    return null;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
+export const getUsers = async (): Promise<Partial<User>[]> => {
+  try {
+    const users = await User.findAll({
+      attributes: ["username", "role", "email"],
+    });
+    return users;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+};
+
+export const getUsersWithRole = async (
+  role: string
+): Promise<Partial<User>[]> => {
+  try {
+    const users = await User.findAll({
+      where: {
         role: role,
-      }
-    );
-
-    return {
-      result: result.result,
-      message: "Role updated successfully",
-    };
+      },
+      attributes: ["username", "role", "email"],
+    });
+    return users;
   } catch (err) {
     console.error(err);
-    return {
-      error: err,
-      message: "There was an error updating the role",
-    };
+    return [];
   }
 };
 
-export const getUsers = async (): Promise<{
-  users?: Array<User>;
-  error?: any;
-}> => {
-  try {
-    const [result] = await db.query("SELECT * FROM users");
-
-    if ((result.result as any[])?.length === 0) {
-      return {
-        error: "No users found",
-      };
-    }
-
-    const users = result.result as Array<User>;
-
-    return { users };
-  } catch (err) {
-    console.error(err);
-    return {
-      error: err,
-    };
-  }
-};
-
-export const disableUser = async (
-  username: string
-): Promise<{
-  result?: any;
-  error?: any;
-  message?: string;
-}> => {
+export const disableUser = async (username: string): Promise<boolean> => {
   try {
     if (!username) {
-      return {
-        error: "Username is required",
-        message: "Username is required",
-      };
+      throw new Error("Username not provided");
     }
-
-    const [result] = await db.query(
-      "UPDATE users SET disabled = 1 WHERE username = $username",
-      {
+    const user = await User.findOne({
+      where: {
         username: username,
-      }
-    );
-
-    return {
-      result: result.result,
-      message: "User disabled successfully",
-    };
+      },
+    });
+    if (user) {
+      await user.update({ disabled: true });
+      return true;
+    }
+    return false;
   } catch (err) {
     console.error(err);
-    return {
-      error: err,
-      message: "There was an error disabling the user",
-    };
+    return false;
   }
 };

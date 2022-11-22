@@ -27,5 +27,5 @@ app.use("/people", PeopleRouter);
 app.use("/procedures", ProcedureRouter);
 
 app.listen(PORT, () => {
-  console.log(`Onyx listening at port: ${PORT}`);
+  console.info(`Onyx listening at port: ${PORT}`);
 });

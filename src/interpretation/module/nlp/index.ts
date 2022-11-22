@@ -72,17 +72,17 @@ export const trainModel = async () => {
     // TODO: Get this from the path instead of hardcoding it
     const list_intents = `src/interpretation/module/documents/intents.json`;
     writeFileSync(list_intents, JSON.stringify(intentsList));
-    console.log("Trained");
+    console.info("Trained");
     return manager;
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return null;
   }
 };
 
 export const testModel = async () => {
   try {
-    console.log("Testing model...");
+    console.info("Testing model...");
     const language = nlu_config.defaultLanguage;
     const tests = [
       {
@@ -134,10 +134,10 @@ export const testModel = async () => {
           intent.classifications[0].intent
         );
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     });
-    console.log("Model tested");
+    console.info("Model tested");
   } catch (err) {
     console.error(err);
   }

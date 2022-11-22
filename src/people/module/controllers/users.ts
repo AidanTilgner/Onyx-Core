@@ -1,4 +1,3 @@
-import { comparePassword } from "../utils/crypto";
 import {
   generateRefreshToken,
   generateToken,
@@ -9,18 +8,21 @@ import {
   addRefreshToken,
   getRefreshToken,
   deleteRefreshToken,
-} from "../database/queries/tokens";
+} from "../database/queries/tokens-sdb";
 import {
   getUser as getDBUser,
   addUser as addDBUser,
   getUsers as getDBUsers,
 } from "../database/queries/users";
 import { AllowedRoles } from "../interfaces/roles";
-import { User } from "../interfaces/users";
+import User from "../database/models/user";
 
 export const addUser = async (username: string, role: AllowedRoles) => {
   try {
-    const { user, generated_password, error } = await addDBUser(username, role);
+    const { user, generated_password, error } = await addDBUser({
+      username,
+      role,
+    });
     if (error) {
       return {
         error: error,
@@ -45,10 +47,10 @@ export const addUser = async (username: string, role: AllowedRoles) => {
 
 export const getUser = async (username: string) => {
   try {
-    const { user, error } = await getDBUser(username);
-    if (error) {
+    const user = await getDBUser(username);
+    if (!user) {
       return {
-        error: error,
+        error: "Error fetching user",
         message: "There was an error fetching the user",
       };
     }
@@ -68,13 +70,7 @@ export const getUser = async (username: string) => {
 export const signInUser = async (username: string, password: string) => {
   try {
     // Find user
-    const { user, error } = await getDBUser(username, true);
-
-    if (error) {
-      return {
-        error,
-      };
-    }
+    const user = await getDBUser(username, true);
 
     if (!user) {
       return {
@@ -83,17 +79,14 @@ export const signInUser = async (username: string, password: string) => {
       };
     }
 
-    // Compare passwords
-    const { password: hashedPassword } = user;
-
-    if (!hashedPassword) {
+    if (!user.password) {
       return {
-        error: "User not found",
-        message: "User not found",
+        error: "User has no password",
+        message: "User has no password",
       };
     }
 
-    const isPasswordCorrect = await comparePassword(password, hashedPassword);
+    const isPasswordCorrect = await (user as User).comparePassword(password);
 
     if (!isPasswordCorrect) {
       return {
@@ -169,20 +162,12 @@ export const refreshUser = async (refresh_token: string, username: string) => {
       };
     }
 
-    const { user, error: user_error } = await getDBUser(username);
-
-    if (user_error) {
-      return {
-        error: user_error,
-        message: "There was an error fetching the user",
-        validated: false,
-      };
-    }
+    const user = await getDBUser(username);
 
     if (!user) {
       return {
         error: "User not found",
-        message: "User not found",
+        message: "There was an error fetching the user",
         validated: false,
       };
     }
@@ -233,14 +218,8 @@ export const logoutUser = async (username: string) => {
 export const getMe = async (decoded: User) => {
   try {
     const { username } = decoded;
-    const { user, error } = await getDBUser(username);
+    const user = await getDBUser(username);
     const allowedRoles = await getAllowedRoles(username);
-
-    if (error) {
-      return {
-        error,
-      };
-    }
 
     if (!user) {
       return {
@@ -267,13 +246,7 @@ export const getMe = async (decoded: User) => {
 
 export const getUsers = async () => {
   try {
-    const { users, error } = await getDBUsers();
-
-    if (error) {
-      return {
-        error,
-      };
-    }
+    const users = await getDBUsers();
 
     return {
       result: users,

@@ -29,9 +29,7 @@ export const hasRole = async (
   username: string
 ): Promise<boolean> => {
   try {
-    const userResponse = await getUser(username);
-    if (!userResponse) return false;
-    const { user } = userResponse;
+    const user = await getUser(username);
     if (!user) return false;
     // if the rank of the role is less than or equal to the rank of the user's role, return true
     if (!user.role) {
@@ -46,9 +44,7 @@ export const hasRole = async (
 
 export const getRole = async (username: string): Promise<Role | null> => {
   try {
-    const userResponse = await getUser(username);
-    if (!userResponse) return roles.user;
-    const { user } = userResponse;
+    const user = await getUser(username);
     if (!user) return roles.user;
     if (!user.role) {
       return null;
@@ -67,8 +63,6 @@ export const tokenHasRole = async (
   }
 ): Promise<boolean> => {
   try {
-    // if the rank of the role is less than or equal to the rank of the user's role, return true
-    console.log("has role for user", decoded);
     return roles[role].rank <= roles[decoded.role].rank;
   } catch (err) {
     console.error(err);
@@ -97,24 +91,17 @@ export const initDefaultUser = async () => {
   try {
     const { DEFAULT_USERNAME } = process.env;
     if (!DEFAULT_USERNAME) throw new Error("DEFAULT_USERNAME not set");
-    const userResponse = await getUser(DEFAULT_USERNAME);
+    const existing = await getUser(DEFAULT_USERNAME);
 
-    const { user: existing_user, error: existing_error } = userResponse;
-
-    if (existing_error) {
-      console.log(
-        "There was an error checking if the default user exists",
-        existing_error
-      );
-    }
-    if (existing_user) {
-      console.log("Default user already exists");
+    if (existing) {
+      console.info("Default user already exists, not creating");
       return;
     }
-    const { user, error, generated_password } = await addUser(
-      DEFAULT_USERNAME,
-      "hyperuser"
-    );
+
+    const { user, error, generated_password } = await addUser({
+      username: DEFAULT_USERNAME,
+      role: "hyperuser",
+    });
     if (error) {
       console.error(error);
       return;
@@ -123,7 +110,7 @@ export const initDefaultUser = async () => {
       console.error("No user returned");
       return;
     }
-    console.log("Added default user");
+    console.info("Added default user");
 
     writeFileSync(
       ".secrets",

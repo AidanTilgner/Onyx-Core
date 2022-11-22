@@ -81,7 +81,7 @@ export const getActionExpectedEntities = async (
       expected_entities: expected_entities,
     };
   } catch (err) {
-    console.log("Error getting action expected entities");
+    console.error("Error getting action expected entities");
     return {
       error: err,
       has_custom_entities: false,

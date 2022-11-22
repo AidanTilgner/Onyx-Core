@@ -7,7 +7,7 @@ export const recommendClothing = async (): Promise<ActionResponse> => {
       success: true,
     };
   } catch (err) {
-    console.log("Error: ", err);
+    console.error("Error: ", err);
     return {
       action_response:
         "I guess I'm not exactly sure what you should wear today.",
@@ -38,7 +38,7 @@ export const recommendClothingForItem = async (
       success: true,
     };
   } catch (err) {
-    console.log("Error: ", err);
+    console.error("Error: ", err);
     return {
       action_response:
         "I guess I'm not exactly sure what you should wear today.",

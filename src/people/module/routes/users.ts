@@ -63,11 +63,14 @@ router.get("/:username", authenticateSuperUser, async (req, res) => {
   try {
     const username = req.params.username;
     const result = await getUser(username);
-    if (result.error) {
-      return res.send(result);
+    if (!result) {
+      return res.send({
+        error: "User not found",
+        message: "User not found",
+      });
     }
     res.send({
-      result: result.user,
+      result: result,
       message: "User fetched successfully",
     });
   } catch (err) {
@@ -84,14 +87,15 @@ router.put("/:username/disable", authenticateSuperUser, async (req, res) => {
     const username = req.params.username;
     const result = await disableUser(username);
 
-    if (result.error) {
+    if (!result) {
       return res.send({
-        error: result.error,
+        error: "User not found",
+        message: "User not found",
       });
     }
 
     res.send({
-      result: result.result,
+      result: result,
       message: "User disabled successfully",
     });
   } catch (err) {

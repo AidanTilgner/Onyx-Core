@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
       response: actionResponse,
     });
   } catch (err) {
-    console.log("Error: ", err);
+    console.error("Error: ", err);
   }
 });
 
@@ -59,7 +59,7 @@ router.post("/:action", async (req, res) => {
       response: actionResponse,
     });
   } catch (err) {
-    console.log("Error: ", err);
+    console.error("Error: ", err);
   }
 });
 

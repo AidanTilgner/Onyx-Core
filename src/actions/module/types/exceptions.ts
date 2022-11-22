@@ -1,6 +1,6 @@
 import { ActionResponse } from "../index";
 export const standard = async (err: any): Promise<ActionResponse> => {
-  console.log("Exception:", err);
+  console.error("Exception:", err);
   return {
     error: "There was an error performing that action.",
     action_response: "There was an error performing that action.",
@@ -10,7 +10,7 @@ export const standard = async (err: any): Promise<ActionResponse> => {
 };
 
 export const action_not_found = async (err: any): Promise<ActionResponse> => {
-  console.log("Exception: No action found for that action.", err);
+  console.error("Exception: No action found for that action.", err);
   return {
     error: "There was an error performing that action.",
     action_response: "There was an error performing that action.",
@@ -20,7 +20,7 @@ export const action_not_found = async (err: any): Promise<ActionResponse> => {
 };
 
 export const no_action = async (err: any): Promise<ActionResponse> => {
-  console.log("Exception:", err);
+  console.error("Exception:", err);
   return {
     error: "There was an error performing that action.",
     action_response: "There was an error performing that action.",

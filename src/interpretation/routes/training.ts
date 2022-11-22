@@ -91,7 +91,7 @@ router.get("/actions/supported", async (req, res) => {
         return res.data.actions;
       })
       .catch((err) => {
-        console.log("Error: ", err);
+        console.error("Error: ", err);
         return res.send({
           error: "There was an error getting the supported actions",
         });

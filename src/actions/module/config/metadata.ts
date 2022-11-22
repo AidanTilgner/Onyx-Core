@@ -11,7 +11,7 @@ export const generateMetaData = async () => {
     generateUnsupportedActions();
     generateUnsupportedActionsWithoutResponse();
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -31,7 +31,7 @@ const generateUnsupportedActions = async () => {
 
     return unsupportedActions;
   } catch (err) {
-    console.log("Error generating unsupported actions:", err);
+    console.error("Error generating unsupported actions:", err);
     return [];
   }
 };
@@ -53,7 +53,7 @@ const generateUnsupportedActionsWithoutResponse = async () => {
 
     return unsupportedActions;
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return [];
   }
 };

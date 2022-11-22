@@ -8,7 +8,7 @@ const describeCurrentState = async (): Promise<ActionResponse> => {
       success: true,
     };
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return {
       error: "There was an error getting the current state.",
       action_response:

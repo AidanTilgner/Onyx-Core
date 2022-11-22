@@ -1,5 +1,5 @@
 import { generateToken, verifyRefreshToken } from "../utils/jwt";
-import { getRefreshToken } from "../database/queries/tokens";
+import { getRefreshToken } from "../database/queries/tokens-sdb";
 
 export const refreshToken = async (key: string, refresh_token: string) => {
   try {
