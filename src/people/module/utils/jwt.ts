@@ -3,7 +3,8 @@ import { config } from "dotenv";
 
 config();
 
-const { JWT_SECRET, JWT_RESET } = process.env;
+const { JWT_SECRET, JWT_RESET, ACCESS_EXPIRATION, REFRESH_EXPIRATION } =
+  process.env;
 
 export const generateToken = (
   token: {
@@ -14,9 +15,9 @@ export const generateToken = (
   }
 ) => {
   const { expiresIn } = options || {
-    expiresIn: "1d",
+    expiresIn: ACCESS_EXPIRATION || "1d",
   };
-  return jwt.sign(token, JWT_SECRET, {
+  return jwt.sign(token, JWT_SECRET || "secret", {
     expiresIn,
   });
 };
@@ -30,16 +31,16 @@ export const generateRefreshToken = (
   }
 ) => {
   const { expiresIn } = options || {
-    expiresIn: "30d",
+    expiresIn: REFRESH_EXPIRATION || "7d",
   };
-  return jwt.sign(token, JWT_RESET, {
+  return jwt.sign(token, JWT_RESET || "reset_secret", {
     expiresIn,
   });
 };
 
 export const verifyToken = async (token: string) => {
   try {
-    const verified = jwt.verify(token, JWT_SECRET);
+    const verified = jwt.verify(token, JWT_SECRET || "secret");
     return verified;
   } catch (err) {
     console.error(err);
@@ -48,5 +49,5 @@ export const verifyToken = async (token: string) => {
 };
 
 export const verifyRefreshToken = (token: string) => {
-  return jwt.verify(token, JWT_RESET);
+  return jwt.verify(token, JWT_RESET || "reset_secret");
 };

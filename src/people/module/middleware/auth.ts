@@ -13,11 +13,16 @@ export const authenticateToken = async (
   next: NextFunction
 ) => {
   try {
-    const token =
-      req.headers.authorization?.split(" ")[1] ||
-      req.query.token ||
-      req.body.token ||
-      req.headers["x-access-token"];
+    const token: string =
+      (req.query.access_token as string) ||
+      (req.headers["x-access-token"] as string);
+
+    if (!token) {
+      return res.status(401).json({
+        message: "Access denied. No token provided.",
+      });
+    }
+
     if (isDev && token === "testing") {
       return next();
     }
