@@ -16,7 +16,8 @@ export const authenticateToken = async (
     const token =
       req.headers.authorization?.split(" ")[1] ||
       req.query.token ||
-      req.body.token;
+      req.body.token ||
+      req.headers["x-access-token"];
     if (isDev && token === "testing") {
       return next();
     }
