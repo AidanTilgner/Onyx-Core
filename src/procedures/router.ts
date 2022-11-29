@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { useProcedure } from "./module";
+import { useProcedure, triggerActionFromTriggerString } from "./module";
 import { checkApiKey } from "./module/middleware/checkApiKey";
 const router = Router();
 
@@ -29,10 +29,13 @@ router.post("/procedure/:procedure", async (req, res) => {
 
 router.post("/trigger/:trigger", checkApiKey, async (req, res) => {
   const { args } = req.body;
-  const procedureRes = await useProcedure(
-    "trigger_action_from_trigger_string",
+  if (!req.body.action_string) {
+    return res.status(400).send("No action string provided");
+  }
+
+  const procedureRes = await triggerActionFromTriggerString(
     req.body.action_string,
-    typeof args === "string" ? JSON.parse(args) : args
+    ...args
   );
   if (!procedureRes) {
     return res

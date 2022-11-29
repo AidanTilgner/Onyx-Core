@@ -1,9 +1,12 @@
+import Logger from "utils/logger";
 import nluProcedures from "./defs/nlu";
-import triggerProcedures from "./defs/triggers";
+import ProcedureInterfacer from "procedures/interfacer";
+import { sendEmail } from "utils/email";
+
+const actions = new ProcedureInterfacer().actionsInterface;
 
 const procedures = {
   ...nluProcedures,
-  ...triggerProcedures,
 };
 
 export const useProcedure = async (procedureName: string, ...args: any[]) => {
@@ -17,6 +20,36 @@ export const useProcedure = async (procedureName: string, ...args: any[]) => {
 
 export const getProcedure = (procedureName: string) => {
   return procedures[procedureName];
+};
+
+const triggerLogger = new Logger("triggers");
+export const triggerActionFromTriggerString = async (
+  actionString: string,
+  ...action_args: any
+) => {
+  const actionResponse = await actions.performAction(
+    actionString,
+    ...action_args
+  );
+  if (!actionResponse) {
+    triggerLogger.error(
+      `Action '${actionString}' failed when called by trigger. See args:`,
+      JSON.stringify(action_args)
+    );
+    return false;
+  }
+  triggerLogger.info(
+    `Action '${actionString}' called by trigger. See args:`,
+    JSON.stringify(action_args)
+  );
+  sendEmail({
+    subject: `Action '${actionString}' called by trigger`,
+    html: `Action '${actionString}' called by trigger. See args: ${JSON.stringify(
+      action_args
+    )}`,
+  });
+
+  return true;
 };
 
 export default procedures;

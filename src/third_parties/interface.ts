@@ -1,12 +1,12 @@
 import { Interface } from "docs/interfaces";
-import { thirdPartyApi } from "./module/index";
+import weather from "./module/apis/openweather";
 
 class ThirdPartiesInterface extends Interface {
-  public thirdPartyApi: typeof thirdPartyApi = thirdPartyApi;
-
   constructor() {
     super("ThirdParties");
   }
+
+  public weather = weather;
 }
 
 export default ThirdPartiesInterface;

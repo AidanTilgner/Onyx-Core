@@ -3,27 +3,19 @@ import { ActionResponse } from "..";
 
 const interfacer = new ActionsInterfacer();
 
-const thirdPartyApi = interfacer.thirdPartiesInterface.thirdPartyApi;
+const weather = interfacer.thirdPartiesInterface.weather;
 
 const getWeather = async (...args: any[]): Promise<ActionResponse> => {
   try {
-    console.log("Args: ", args);
-    const city = args[0].city || "Salem,OR,US";
-    const { data } = await thirdPartyApi.get(`/weather?location=${city}`);
-    if (data.error) {
-      return {
-        error: data.error,
-        action_performed: "weather.default",
-        action_response: "error",
-        success: false,
-      };
-    }
+    const city = args[0].city;
+    const coords = await weather.geocode(city);
+    const weatherData = await weather.current(coords[0].lat, coords[0].lon);
     const formattedCity = city.split(",")[0];
 
-    const message = `The weather in ${formattedCity} is "${data.data.weather[0].description}" with a temperature of ${data.data.main.temp} degrees.`;
+    const message = `The weather in ${formattedCity} is ${weatherData.weather[0].description}.`;
 
     return {
-      data: data,
+      data: weatherData,
       action_response: message,
       action_performed: "weather.default",
       success: true,
@@ -41,21 +33,15 @@ const getWeather = async (...args: any[]): Promise<ActionResponse> => {
 
 const getTemperature = async (...args: any[]): Promise<ActionResponse> => {
   try {
-    const city = args[0].city || "Salem,OR,US";
-    const { data } = await thirdPartyApi.get(`/weather?location=${city}`);
-    if (data.error) {
-      return {
-        error: data.error,
-        action_performed: "weather.temperature",
-        action_response: "error",
-        success: false,
-      };
-    }
+    const city = args[0].city;
+    const coords = await weather.geocode(city);
+    const weatherData = await weather.current(coords[0].lat, coords[0].lon);
+
     const formattedCity = city.split(",")[0];
-    const message = `The current temperature in ${formattedCity} is ${data.data.main.temp} degrees.`;
+    const message = `The temperature in ${formattedCity} is ${weatherData.temp} degrees.`;
 
     return {
-      data: data,
+      data: weatherData,
       action_response: message,
       action_performed: "weather.temperature",
       success: true,

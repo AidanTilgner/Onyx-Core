@@ -7,7 +7,9 @@ import { ActionResponse } from "./index";
 
 export interface Mappings {
   // can return a function with the type of action_response
-  [key: string]: Mappings | ((...args: any[]) => Promise<ActionResponse>);
+  [key: string]:
+    | Mappings
+    | ((...action_args: any[]) => Promise<ActionResponse>);
 }
 
 const mappings: Mappings = {

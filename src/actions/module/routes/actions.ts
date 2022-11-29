@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { performAction } from "../dispatch";
 import mappings from "../mappings";
 import {
   getActionMetadata,
@@ -49,8 +50,8 @@ router.post("/:action", async (req, res) => {
         error: `Action "${action}" not found`,
       });
     }
-    const [act, subact = "default"] = action.split(".");
-    const actionResponse: any = await mappings[act][subact](req.body);
+    const { args } = req.body;
+    const actionResponse = await performAction(action, ...args);
     if (actionResponse) {
       addRecentAction(action);
     }

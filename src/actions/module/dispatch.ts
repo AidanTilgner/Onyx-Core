@@ -128,7 +128,7 @@ export const parseAndUseNLU = async (nlu: NLUResponse) => {
 
 export const performAction = async (
   actionString: string,
-  ...args: any[]
+  ...action_args: any[]
 ): Promise<ActionResponse | null> => {
   try {
     const [action, subaction = "default"] = actionString.split(".");
@@ -136,7 +136,7 @@ export const performAction = async (
     if (!actionFunction) {
       return null;
     }
-    return await actionFunction(...args);
+    return await actionFunction(...action_args);
   } catch (err) {
     console.error(err);
     return null;
@@ -154,7 +154,7 @@ export const performBatchActions = async (
   } = {};
   for (let i = 0; i < actions.length; i++) {
     const { action, args } = actions[i];
-    const actionRes = await performAction(action, args);
+    const actionRes = await performAction(action, ...args);
     if (!actionRes) {
       continue;
     }
