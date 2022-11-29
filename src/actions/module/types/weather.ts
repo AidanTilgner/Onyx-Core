@@ -7,7 +7,7 @@ const weather = interfacer.thirdPartiesInterface.weather;
 
 const getWeather = async (...args: any[]): Promise<ActionResponse> => {
   try {
-    const city = args[0].city;
+    const city = args[0]?.city || "Salem,Or,USA";
     const coords = await weather.geocode(city);
     const weatherData = await weather.current(coords[0].lat, coords[0].lon);
     const formattedCity = city.split(",")[0];
@@ -33,7 +33,7 @@ const getWeather = async (...args: any[]): Promise<ActionResponse> => {
 
 const getTemperature = async (...args: any[]): Promise<ActionResponse> => {
   try {
-    const city = args[0].city;
+    const city = args[0]?.city || "Salem,Or,USA";
     const coords = await weather.geocode(city);
     const weatherData = await weather.current(coords[0].lat, coords[0].lon);
 
