@@ -1,7 +1,9 @@
 import nluProcedures from "./defs/nlu";
+import triggerProcedures from "./defs/triggers";
 
 const procedures = {
   ...nluProcedures,
+  ...triggerProcedures,
 };
 
 export const useProcedure = async (procedureName: string, ...args: any[]) => {

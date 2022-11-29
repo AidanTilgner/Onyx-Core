@@ -2,3 +2,4 @@ node_modules
 build/
 .secrets
 .env
+api_keys.json

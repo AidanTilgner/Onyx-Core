@@ -1,6 +1,9 @@
 import { ActionResponse, NLUResponse } from "./index.d";
 import mappings from "./mappings";
 import { getActionFromActionString } from "./utils";
+import Logger from "utils/logger";
+
+const actionLogger = new Logger("actions");
 
 export const parseAndUseNLU = async (nlu: NLUResponse) => {
   try {
@@ -46,7 +49,7 @@ export const parseAndUseNLU = async (nlu: NLUResponse) => {
       const performAction = getActionFromActionString(action);
 
       if (!performAction) {
-        toSend.custom_message += " An action not found.";
+        toSend.custom_message += "An action not found.";
         continue;
       }
 
@@ -67,11 +70,35 @@ export const parseAndUseNLU = async (nlu: NLUResponse) => {
           initial_input,
           split_input,
           metaData,
+        }).then(() => {
+          actionLogger.info(`Action '${action}' called by NLU. See args:`, {
+            intent,
+            action,
+            response,
+            nlu_response,
+            classifications,
+            initial_actions,
+            initial_input,
+            split_input,
+            metaData,
+          });
         });
         toSend.actions.push(action);
         continue;
       }
       const { custom_message } = await performAction(entitiesObject, {
+        intent,
+        action,
+        response,
+        nlu_response,
+        classifications,
+        initial_actions,
+        initial_input,
+        split_input,
+        metaData,
+      });
+
+      actionLogger.info(`Action '${action}' called by NLU. See args:`, {
         intent,
         action,
         response,
@@ -101,7 +128,7 @@ export const parseAndUseNLU = async (nlu: NLUResponse) => {
 
 export const performAction = async (
   actionString: string,
-  args: any[]
+  ...args: any[]
 ): Promise<ActionResponse | null> => {
   try {
     const [action, subaction = "default"] = actionString.split(".");
@@ -109,7 +136,7 @@ export const performAction = async (
     if (!actionFunction) {
       return null;
     }
-    return await actionFunction(args);
+    return await actionFunction(...args);
   } catch (err) {
     console.error(err);
     return null;
