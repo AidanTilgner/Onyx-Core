@@ -4,6 +4,7 @@ import {
   getActionFromActionString,
   getSuccessfulActions,
   getFailedActions,
+  getActions,
 } from "./module/utils";
 import ActionMappings from "./module/mappings";
 import {
@@ -13,6 +14,10 @@ import {
 } from "./module/dispatch";
 
 class ActionsInterface extends Interface {
+  constructor() {
+    super("Actions");
+  }
+
   public getActionMetadata = getActionMetadata;
   public getActionFromActionString = getActionFromActionString;
   public parseAndUseNLU = parseAndUseNLU;
@@ -20,10 +25,7 @@ class ActionsInterface extends Interface {
   public performBatchActions = performBatchActions;
   public getSuccessfulActions = getSuccessfulActions;
   public getFailedActions = getFailedActions;
-
-  constructor() {
-    super("Actions");
-  }
+  public getActions = getActions;
 
   getMappings = () => {
     return ActionMappings;

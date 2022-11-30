@@ -1,11 +1,13 @@
-import { interpretationApi } from "./axios";
 import { config } from "dotenv";
 import { checkActionExists } from "../utils";
 import { writeFileSync } from "fs";
+import ActionsInterfacer from "../../interfacer";
 
 config();
 
-const basePath = "./storage/actions/metadata";
+const interpretation = new ActionsInterfacer().interpretationInterface;
+
+const basePath = "storage/actions/metadata";
 
 export const generateMetaData = async () => {
   try {
@@ -19,9 +21,7 @@ export const generateMetaData = async () => {
 
 const generateUnsupportedActions = async () => {
   try {
-    const {
-      data: { actions: existingActions, message },
-    } = await interpretationApi.get("/training/actions/existing");
+    const existingActions = await interpretation.getExistingActions();
     const unsupportedActions: string[] = [];
     existingActions.forEach((action: string) => {
       if (!checkActionExists(action)) {
@@ -40,9 +40,8 @@ const generateUnsupportedActions = async () => {
 
 const generateUnsupportedActionsWithoutResponse = async () => {
   try {
-    const {
-      data: { actions: existingActions, message },
-    } = await interpretationApi.get("/training/actions/without-response");
+    const existingActions =
+      await interpretation.getExistingActionsWithoutResponse();
     const unsupportedActions: string[] = [];
     existingActions.forEach((action: string) => {
       if (!checkActionExists(action)) {

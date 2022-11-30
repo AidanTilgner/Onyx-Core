@@ -1,6 +1,10 @@
 import { Interface } from "docs/interfaces";
-import { MetaData } from "./module/index.d";
 import { initModel, trainModel, testModel } from "./module/nlp";
+import {
+  getTrainingData,
+  getExistingActionsWithoutResponse,
+  getExistingActions,
+} from "./module/documents";
 import {
   getIntent,
   getAction,
@@ -16,6 +20,10 @@ class InterpretationInterface extends Interface {
   private initModel: typeof initModel = initModel;
   private trainModel: typeof trainModel = trainModel;
   private testModel: typeof testModel = testModel;
+
+  constructor() {
+    super("Interpretation");
+  }
   public getIntent: typeof getIntent = getIntent;
   public getAction: typeof getAction = getAction;
   public getIntentAndAction: typeof getIntentAndAction = getIntentAndAction;
@@ -23,10 +31,10 @@ class InterpretationInterface extends Interface {
   public getNLUData: typeof getNLUData = getNLUData;
   public getNLUDataWithoutSession: typeof unstable_getNLUDataWithoutSession =
     unstable_getNLUDataWithoutSession;
-
-  constructor() {
-    super("Interpretation");
-  }
+  public getTrainingData: typeof getTrainingData = getTrainingData;
+  public getExistingActionsWithoutResponse: typeof getExistingActionsWithoutResponse =
+    getExistingActionsWithoutResponse;
+  public getExistingActions: typeof getExistingActions = getExistingActions;
 
   public async initNLU() {
     await this.initModel();

@@ -7,8 +7,10 @@ import {
   checkActionExists,
   getRecentActions,
 } from "../utils";
+import { generateMetaData } from "../config/metadata";
 
 const router = Router();
+generateMetaData();
 
 router.post("/", async (req, res) => {
   try {

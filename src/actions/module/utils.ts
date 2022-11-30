@@ -24,6 +24,14 @@ export const getAction = (act: string) => {
   return null;
 };
 
+export const getActions = () => {
+  const mappingsCopy: { [key: string]: string[] } = {};
+  Object.keys(mappings).forEach((key) => {
+    mappingsCopy[key] = Object.keys(mappings[key]);
+  });
+  return mappings;
+};
+
 export const getActionMetadata = async (act: string) => {
   const [action, subaction = "default"] = act.split(".");
   const jsonCopy = action_metadata_mappings as {

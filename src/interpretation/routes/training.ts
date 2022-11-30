@@ -13,10 +13,12 @@ import {
   getExistingActionsWithoutResponse,
 } from "../module/documents";
 import { restartNLP } from "../module/index";
-import { actionServer } from "../module/utils/axios";
 import { config } from "dotenv";
+import InterpretationInterfacer from "../interfacer";
 
 config();
+
+const interfacer = new InterpretationInterfacer();
 
 const router = Router();
 
@@ -85,17 +87,7 @@ router.delete("/example", (req, res) => {
 
 router.get("/actions/supported", async (req, res) => {
   try {
-    const actions = await actionServer
-      .get(`/actions`)
-      .then((res) => {
-        return res.data.actions;
-      })
-      .catch((err) => {
-        console.error("Error: ", err);
-        return res.send({
-          error: "There was an error getting the supported actions",
-        });
-      });
+    const actions = await interfacer.actionsInterface.getActions();
 
     return res.send({
       actions: actions,

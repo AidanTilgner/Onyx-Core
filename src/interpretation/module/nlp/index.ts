@@ -1,23 +1,11 @@
 import { NlpManager } from "node-nlp";
-import { Entity, TextToIntent, MetaData, NLUResponse } from "../index.d";
+import { TextToIntent } from "../index.d";
 import text_to_intent_json from "../documents/text_to_intent.json";
-import intent_to_action_json from "../documents/intent_to_action.json";
-import action_to_response_json from "../documents/action_to_response.json";
 import entities_json from "../documents/entities.json";
 import nlu_config from "../documents/config.json";
-import { spellCheckText } from "../similarity/spellcheck";
 import { writeFileSync } from "fs";
-import {
-  generateExistingActions,
-  generateExistingActionsWithoutResponse,
-} from "../documents";
-import {
-  getActionExpectedEntities,
-  checkOpensFormAndOpenIfNecessary,
-  getSessionQuestions,
-  checkCompletesFields,
-} from "./forms";
 import { dockStart } from "@nlpjs/basic";
+import { generateMetaData } from "../documents";
 
 export let manager: NlpManager = null;
 export const initModel = async () => {
@@ -33,6 +21,7 @@ export const initModel = async () => {
     locales: ["en"],
   });
   manager = dock.get("nlp");
+  generateMetaData();
 };
 
 export const trainModel = async () => {
@@ -141,9 +130,4 @@ export const testModel = async () => {
   } catch (err) {
     console.error(err);
   }
-};
-
-export const generateMetaData = () => {
-  generateExistingActions();
-  generateExistingActionsWithoutResponse();
 };

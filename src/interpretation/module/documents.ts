@@ -10,9 +10,9 @@ import existing_actions_without_response from "./documents/existing_actions_with
 import { getAction, getResponse } from "./nlp/utils";
 
 // TODO: Get this from the path instead of hardcoding it
-const pathToLocal = "src/interpretation/module/documents";
+const pathToLocal = "storage/interpretation/metadata";
 
-export const getTrainingData = () => {
+export const getTrainingData = async () => {
   return {
     action_to_response: action_to_response_json,
     intent_to_action: intent_to_action_json,
@@ -53,11 +53,11 @@ export const generateExistingActionsWithoutResponse = () => {
   );
 };
 
-export const getExistingActions = () => {
+export const getExistingActions = async () => {
   return existing_actions ? existing_actions : [];
 };
 
-export const getExistingActionsWithoutResponse = () => {
+export const getExistingActionsWithoutResponse = async () => {
   return existing_actions_without_response
     ? existing_actions_without_response
     : [];
@@ -299,4 +299,9 @@ export const removeAsExample = (text: string) => {
     message: `Successfully removed example "${text}"`,
     data: copyJSON,
   };
+};
+
+export const generateMetaData = () => {
+  generateExistingActions();
+  generateExistingActionsWithoutResponse();
 };
