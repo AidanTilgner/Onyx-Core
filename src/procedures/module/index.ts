@@ -23,7 +23,7 @@ export const getProcedure = (procedureName: string) => {
 };
 
 const triggerLogger = new Logger("triggers");
-export const triggerActionFromTriggerString = async (
+export const triggerActionFromActionString = async (
   actionString: string,
   ...action_args: any
 ) => {

@@ -3,7 +3,9 @@ import { config } from "dotenv";
 import { checkActionExists } from "../utils";
 import { writeFileSync } from "fs";
 
-config({ path: "../.env" });
+config();
+
+const basePath = "./storage/actions/metadata";
 
 export const generateMetaData = async () => {
   try {
@@ -26,7 +28,7 @@ const generateUnsupportedActions = async () => {
         unsupportedActions.push(action);
       }
     });
-    const pathToFile = "./storage/metadata/unsupported_actions.json";
+    const pathToFile = `${basePath}/unsupported_actions.json`;
     writeFileSync(pathToFile, JSON.stringify(unsupportedActions, null, 2));
 
     return unsupportedActions;
@@ -47,8 +49,7 @@ const generateUnsupportedActionsWithoutResponse = async () => {
         unsupportedActions.push(action);
       }
     });
-    const pathToFile =
-      "./storage/metadata/unsupported_actions_without_response.json";
+    const pathToFile = `${basePath}/unsupported_actions_without_response.json`;
     writeFileSync(pathToFile, JSON.stringify(unsupportedActions, null, 2));
 
     return unsupportedActions;

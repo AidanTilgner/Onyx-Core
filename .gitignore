@@ -3,3 +3,4 @@ build/
 .secrets
 .env
 api_keys.json
+storage
