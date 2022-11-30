@@ -5,7 +5,6 @@ import entities_json from "../documents/entities.json";
 import nlu_config from "../documents/config.json";
 import { writeFileSync } from "fs";
 import { dockStart } from "@nlpjs/basic";
-import { generateMetaData } from "../documents";
 
 export let manager: NlpManager = null;
 export const initModel = async () => {
@@ -21,7 +20,6 @@ export const initModel = async () => {
     locales: ["en"],
   });
   manager = dock.get("nlp");
-  generateMetaData();
 };
 
 export const trainModel = async () => {

@@ -5,6 +5,7 @@ import {
   getSuccessfulActions,
   getFailedActions,
   getActions,
+  checkActionExists,
 } from "./module/utils";
 import ActionMappings from "./module/mappings";
 import {
@@ -26,6 +27,7 @@ class ActionsInterface extends Interface {
   public getSuccessfulActions = getSuccessfulActions;
   public getFailedActions = getFailedActions;
   public getActions = getActions;
+  public checkActionExists = checkActionExists;
 
   getMappings = () => {
     return ActionMappings;

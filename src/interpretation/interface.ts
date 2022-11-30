@@ -4,7 +4,8 @@ import {
   getTrainingData,
   getExistingActionsWithoutResponse,
   getExistingActions,
-} from "./module/documents";
+  generateMetaData,
+} from "./module/docs";
 import {
   getIntent,
   getAction,
@@ -20,6 +21,7 @@ class InterpretationInterface extends Interface {
   private initModel: typeof initModel = initModel;
   private trainModel: typeof trainModel = trainModel;
   private testModel: typeof testModel = testModel;
+  private generateMetaData = generateMetaData;
 
   constructor() {
     super("Interpretation");
@@ -40,6 +42,7 @@ class InterpretationInterface extends Interface {
     await this.initModel();
     await this.trainModel();
     await this.testModel();
+    this.generateMetaData();
   }
 }
 

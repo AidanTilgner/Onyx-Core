@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getNLUData } from "../module/nlp/nlu";
+import { getNLUData } from "../nlp/nlu";
 
 const router = Router();
 

@@ -11,10 +11,10 @@ import {
   removeAsExample,
   getExistingActions,
   getExistingActionsWithoutResponse,
-} from "../module/documents";
-import { restartNLP } from "../module/index";
+} from "../docs";
+import { restartNLP } from "../index";
 import { config } from "dotenv";
-import InterpretationInterfacer from "../interfacer";
+import InterpretationInterfacer from "../../interfacer";
 
 config();
 

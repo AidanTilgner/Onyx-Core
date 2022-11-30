@@ -60,7 +60,7 @@ export const addRecentAction = (act: string) => {
   }
 
   writeFileSync(
-    "actions/documents/recent_actions.json",
+    "src/actions/module/documents/recent_actions.json",
     JSON.stringify(jsonCopy, null, 2)
   );
 

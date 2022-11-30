@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getSimpleResponse } from "interpretation/module/nlp/chat";
-import { createSession } from "../module/utils/sessions";
+import { createSession } from "../utils/sessions";
 
 const router = Router();
 

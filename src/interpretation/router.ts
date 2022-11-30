@@ -1,7 +1,7 @@
 import { Router } from "express";
-import NLURouter from "./routes/nlu";
-import TrainingRouter from "./routes/training";
-import ChatRouter from "./routes/chat";
+import NLURouter from "./module/routes/nlu";
+import TrainingRouter from "./module/routes/training";
+import ChatRouter from "./module/routes/chat";
 import InterpretationInterfacer from "./interfacer";
 
 const interfacer = new InterpretationInterfacer();

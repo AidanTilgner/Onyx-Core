@@ -2,6 +2,7 @@ import { config } from "dotenv";
 import { checkActionExists } from "../utils";
 import { writeFileSync } from "fs";
 import ActionsInterfacer from "../../interfacer";
+import { formatJSON } from "../../../utils/prettier";
 
 config();
 
@@ -29,7 +30,8 @@ const generateUnsupportedActions = async () => {
       }
     });
     const pathToFile = `${basePath}/unsupported_actions.json`;
-    writeFileSync(pathToFile, JSON.stringify(unsupportedActions, null, 2));
+    const formatted = formatJSON(JSON.stringify(unsupportedActions, null, 2));
+    writeFileSync(pathToFile, formatted);
 
     return unsupportedActions;
   } catch (err) {
@@ -49,7 +51,8 @@ const generateUnsupportedActionsWithoutResponse = async () => {
       }
     });
     const pathToFile = `${basePath}/unsupported_actions_without_response.json`;
-    writeFileSync(pathToFile, JSON.stringify(unsupportedActions, null, 2));
+    const formatted = formatJSON(JSON.stringify(unsupportedActions, null, 2));
+    writeFileSync(pathToFile, formatted);
 
     return unsupportedActions;
   } catch (err) {

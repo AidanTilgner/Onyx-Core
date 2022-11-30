@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { useProcedure, triggerActionFromActionString } from "./module";
 import { checkApiKey } from "./module/middleware/checkApiKey";
+import ProcedureInterfacer from "./interfacer";
 const router = Router();
+
+const interfacer = new ProcedureInterfacer();
 
 router.post("/procedure/:procedure", async (req, res) => {
   try {
@@ -27,10 +30,16 @@ router.post("/procedure/:procedure", async (req, res) => {
   }
 });
 
-router.post("/trigger/:trigger", checkApiKey, async (req, res) => {
+router.post("/trigger/:action_string", checkApiKey, async (req, res) => {
+  const exists = interfacer.actionsInterface.checkActionExists(
+    req.params.action_string
+  );
+  if (!exists) {
+    return res.status(404).send({ message: "Trigger not found" });
+  }
   const { args } = req.body;
   const procedureRes = await triggerActionFromActionString(
-    req.params.trigger,
+    req.params.action_string,
     ...args
   );
   if (!procedureRes) {

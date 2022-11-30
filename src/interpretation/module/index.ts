@@ -1,4 +1,5 @@
-import { initModel, testModel, trainModel, generateMetaData } from "./nlp";
+import { initModel, testModel, trainModel } from "./nlp";
+import { generateMetaData } from "./docs";
 
 export const startNLP = async () => {
   try {
@@ -6,7 +7,6 @@ export const startNLP = async () => {
     await initModel();
     await trainModel();
     await testModel();
-    generateMetaData();
   } catch (err) {
     console.error(err);
   }
