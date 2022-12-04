@@ -1,6 +1,7 @@
 import weatherMappings from "./types/weather";
 import exceptionMappings from "./types/exceptions";
 import stateMappings from "./types/state";
+import notificationsMappings from "./types/notifications";
 import { recommendClothingMappings } from "./types/clothing";
 import { ActionFunction } from "./index.d";
 
@@ -14,6 +15,7 @@ const mappings: Mappings = {
   state: stateMappings,
   exception: exceptionMappings,
   recommend_clothing: recommendClothingMappings,
+  notifications: notificationsMappings,
 };
 
 export default mappings;

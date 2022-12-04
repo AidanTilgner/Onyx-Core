@@ -139,9 +139,22 @@ export const performAction = async (
     const [action, subaction = "default"] = actionString.split(".");
     const actionFunction: ActionFunction = mappings[action]?.[subaction];
     if (!actionFunction) {
+      actionLogger.error(`Action '${actionString}' not found.`);
       return null;
     }
-    return await actionFunction(action_args);
+    const performed = await actionFunction(action_args);
+
+    if (!performed.success) {
+      actionLogger.error(`Action '${actionString}' failed.`, performed);
+      return performed;
+    }
+
+    actionLogger.info(
+      `Action '${actionString}' called successfully. See args:`,
+      JSON.stringify(action_args)
+    );
+
+    return performed;
   } catch (err) {
     console.error(err);
     return null;

@@ -39,12 +39,12 @@ export const triggerActionFromActionString = async (
     `Action '${actionString}' called by trigger. See args:`,
     JSON.stringify(action_args)
   );
-  sendEmail({
-    subject: `Action '${actionString}' called by trigger`,
-    html: `Action '${actionString}' called by trigger. See args: ${JSON.stringify(
-      action_args
-    )}`,
-  });
+  // sendEmail({
+  //   subject: `Action '${actionString}' called by trigger`,
+  //   html: `Action '${actionString}' called by trigger. See args: ${JSON.stringify(
+  //     action_args
+  //   )}`,
+  // });
 
   return true;
 };
