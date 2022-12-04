@@ -1,4 +1,4 @@
-import { ActionResponse } from "../index.d";
+import { ActionArgs, ActionResponse } from "../index.d";
 export const recommendClothing = async (): Promise<ActionResponse> => {
   try {
     return {
@@ -19,10 +19,19 @@ export const recommendClothing = async (): Promise<ActionResponse> => {
 };
 
 export const recommendClothingForItem = async (
-  ...args
+  props: ActionArgs
 ): Promise<ActionResponse> => {
   try {
-    const { clothing_item } = args[0];
+    const clothing_item = props?.clothing_item;
+    if (!clothing_item) {
+      return {
+        action_response:
+          "I guess I'm not exactly sure what you should wear today.",
+        error: "There was an issue picking your clothes today.",
+        action_performed: "recommend_clothing.default",
+        success: false,
+      };
+    }
     if (clothing_item === "dress") {
       return {
         action_response:

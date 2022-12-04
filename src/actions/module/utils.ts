@@ -2,12 +2,16 @@ import mappings, { Mappings } from "./mappings";
 import action_metadata_mappings from "./documents/action_metadata_mappings.json";
 import recent_actions from "./documents/recent_actions.json";
 import { writeFileSync } from "fs";
-import type { ActionResponse, ExpectedEntities } from "./index.d";
+import type {
+  ActionFunction,
+  ActionResponse,
+  ExpectedEntities,
+} from "./index.d";
 
 export const checkActionExists = (act: string) => {
   const [action, subaction = "default"] = act.split(".");
 
-  if (mappings[action] && mappings[action][subaction]) {
+  if (mappings[action][subaction]) {
     return true;
   }
 
@@ -75,10 +79,10 @@ export const getRecentActions = () => {
 
 export const getActionFromActionString = (
   actionString: string
-): Function | null => {
+): ActionFunction | null => {
   const [action, subaction = "default"] = actionString.split(".");
 
-  const realAction = mappings[action]?.[subaction] as Mappings;
+  const realAction = mappings[action]?.[subaction];
 
   if (!realAction) {
     return null;

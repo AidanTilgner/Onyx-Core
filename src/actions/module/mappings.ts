@@ -2,14 +2,11 @@ import weatherMappings from "./types/weather";
 import exceptionMappings from "./types/exceptions";
 import stateMappings from "./types/state";
 import { recommendClothingMappings } from "./types/clothing";
-import { parseAndUseNLU } from "./dispatch";
-import { ActionResponse } from "./index";
+import { ActionFunction } from "./index.d";
 
 export interface Mappings {
   // can return a function with the type of action_response
-  [key: string]:
-    | Mappings
-    | ((...action_args: any[]) => Promise<ActionResponse>);
+  [key: string]: { [key: string]: ActionFunction };
 }
 
 const mappings: Mappings = {

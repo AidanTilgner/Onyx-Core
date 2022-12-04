@@ -14,7 +14,7 @@ export const getSimpleResponse = async (text: string, session_id: string) => {
   const batchActions = actions.map((act) => {
     return {
       action: act,
-      args: [custom_entities[act]],
+      args: custom_entities,
     };
   });
   const actionResponses = await actionsInterface.performBatchActions(

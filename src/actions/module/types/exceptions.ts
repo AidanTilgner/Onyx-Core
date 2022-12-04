@@ -1,6 +1,6 @@
-import { ActionResponse } from "../index";
-export const standard = async (err: any): Promise<ActionResponse> => {
-  console.error("Exception:", err);
+import { ActionResponse, ActionArgs } from "../index";
+export const standard = async (props: ActionArgs): Promise<ActionResponse> => {
+  console.error("Exception:", props.error);
   return {
     error: "There was an error performing that action.",
     action_response: "There was an error performing that action.",
@@ -9,8 +9,10 @@ export const standard = async (err: any): Promise<ActionResponse> => {
   };
 };
 
-export const action_not_found = async (err: any): Promise<ActionResponse> => {
-  console.error("Exception: No action found for that action.", err);
+export const action_not_found = async (
+  props: ActionArgs
+): Promise<ActionResponse> => {
+  console.error("Exception: No action found for that action.", props.error);
   return {
     error: "There was an error performing that action.",
     action_response: "There was an error performing that action.",
@@ -19,8 +21,8 @@ export const action_not_found = async (err: any): Promise<ActionResponse> => {
   };
 };
 
-export const no_action = async (err: any): Promise<ActionResponse> => {
-  console.error("Exception:", err);
+export const no_action = async (props: ActionArgs): Promise<ActionResponse> => {
+  console.error("Exception:", props.error);
   return {
     error: "There was an error performing that action.",
     action_response: "There was an error performing that action.",

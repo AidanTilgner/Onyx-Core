@@ -1,4 +1,9 @@
-import { ActionResponse, NLUResponse } from "./index.d";
+import {
+  ActionArgs,
+  ActionFunction,
+  ActionResponse,
+  NLUResponse,
+} from "./index.d";
 import mappings from "./mappings";
 import { getActionFromActionString } from "./utils";
 import Logger from "utils/logger";
@@ -46,9 +51,9 @@ export const parseAndUseNLU = async (nlu: NLUResponse) => {
       const action = actions[i];
       const response = responses[i];
       // TODO: If in production, use the default action instead of saying "action not found"
-      const performAction = getActionFromActionString(action);
+      const actionToPerform = getActionFromActionString(action);
 
-      if (!performAction) {
+      if (!actionToPerform) {
         toSend.custom_message += "An action not found.";
         continue;
       }
@@ -60,7 +65,7 @@ export const parseAndUseNLU = async (nlu: NLUResponse) => {
       }
       if (nlu_response && response !== "custom_message") {
         // * Then do this asynchronusly
-        performAction(entitiesObject, {
+        actionToPerform(entitiesObject, {
           intent,
           action,
           response,
@@ -86,7 +91,7 @@ export const parseAndUseNLU = async (nlu: NLUResponse) => {
         toSend.actions.push(action);
         continue;
       }
-      const { custom_message } = await performAction(entitiesObject, {
+      const { action_response } = await actionToPerform(entitiesObject, {
         intent,
         action,
         response,
@@ -110,10 +115,10 @@ export const parseAndUseNLU = async (nlu: NLUResponse) => {
         metaData,
       });
 
-      if (custom_message) {
+      if (action_response) {
         toSend.custom_message += toSend.custom_message.length
-          ? ". " + custom_message
-          : custom_message;
+          ? ". " + action_response
+          : action_response;
       }
     }
 
@@ -128,15 +133,15 @@ export const parseAndUseNLU = async (nlu: NLUResponse) => {
 
 export const performAction = async (
   actionString: string,
-  ...action_args: any[]
+  action_args: ActionArgs
 ): Promise<ActionResponse | null> => {
   try {
     const [action, subaction = "default"] = actionString.split(".");
-    const actionFunction = mappings[action]?.[subaction];
+    const actionFunction: ActionFunction = mappings[action]?.[subaction];
     if (!actionFunction) {
       return null;
     }
-    return await actionFunction(...action_args);
+    return await actionFunction(action_args);
   } catch (err) {
     console.error(err);
     return null;
@@ -146,7 +151,7 @@ export const performAction = async (
 export const performBatchActions = async (
   actions: {
     action: string;
-    args: any[];
+    args: ActionArgs;
   }[]
 ) => {
   const responses: {
@@ -154,7 +159,7 @@ export const performBatchActions = async (
   } = {};
   for (let i = 0; i < actions.length; i++) {
     const { action, args } = actions[i];
-    const actionRes = await performAction(action, ...args);
+    const actionRes = await performAction(action, args);
     if (!actionRes) {
       continue;
     }

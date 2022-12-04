@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
       });
     }
     const [act, subact = "default"] = action.split(".");
-    const actionResponse: Function = await mappings[act][subact](req.body);
+    const actionResponse = await mappings[act][subact](req.body.args);
     if (actionResponse) {
       addRecentAction(action);
     }
@@ -53,7 +53,7 @@ router.post("/:action", async (req, res) => {
       });
     }
     const { args } = req.body;
-    const actionResponse = await performAction(action, ...args);
+    const actionResponse = await performAction(action, args);
     if (actionResponse) {
       addRecentAction(action);
     }

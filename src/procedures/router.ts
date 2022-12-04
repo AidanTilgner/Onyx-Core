@@ -40,7 +40,7 @@ router.post("/trigger/:action_string", checkApiKey, async (req, res) => {
   const { args } = req.body;
   const procedureRes = await triggerActionFromActionString(
     req.params.action_string,
-    ...args
+    args
   );
   if (!procedureRes) {
     return res

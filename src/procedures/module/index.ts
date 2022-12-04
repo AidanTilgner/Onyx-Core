@@ -25,12 +25,9 @@ export const getProcedure = (procedureName: string) => {
 const triggerLogger = new Logger("triggers");
 export const triggerActionFromActionString = async (
   actionString: string,
-  ...action_args: any
+  action_args: { [key: string]: any }
 ) => {
-  const actionResponse = await actions.performAction(
-    actionString,
-    ...action_args
-  );
+  const actionResponse = await actions.performAction(actionString, action_args);
   if (!actionResponse) {
     triggerLogger.error(
       `Action '${actionString}' failed when called by trigger. See args:`,

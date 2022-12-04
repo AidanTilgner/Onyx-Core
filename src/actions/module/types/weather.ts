@@ -1,13 +1,17 @@
 import ActionsInterfacer from "actions/interfacer";
 import { ActionResponse } from "..";
+import { ActionArgs } from "../index";
 
 const interfacer = new ActionsInterfacer();
 
 const weather = interfacer.thirdPartiesInterface.weather;
 
-const getWeather = async (...args: any[]): Promise<ActionResponse> => {
+const getWeather = async (
+  props: ActionArgs,
+  ...other: any
+): Promise<ActionResponse> => {
   try {
-    const city = args[0]?.city || "Salem,Or,USA";
+    const city = props?.city || "Salem,Or,USA";
     const coords = await weather.geocode(city);
     const weatherData = await weather.current(coords[0].lat, coords[0].lon);
     const formattedCity = city.split(",")[0];
@@ -31,9 +35,12 @@ const getWeather = async (...args: any[]): Promise<ActionResponse> => {
   }
 };
 
-const getTemperature = async (...args: any[]): Promise<ActionResponse> => {
+const getTemperature = async (
+  props: ActionArgs,
+  ...other: any
+): Promise<ActionResponse> => {
   try {
-    const city = args[0]?.city || "Salem,Or,USA";
+    const city = props?.city || "Salem,Or,USA";
     const coords = await weather.geocode(city);
     const weatherData = await weather.current(coords[0].lat, coords[0].lon);
 
