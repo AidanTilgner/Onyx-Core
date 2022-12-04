@@ -11,7 +11,7 @@ import type {
 export const checkActionExists = (act: string) => {
   const [action, subaction = "default"] = act.split(".");
 
-  if (mappings[action][subaction]) {
+  if (mappings[action]?.[subaction]) {
     return true;
   }
 
