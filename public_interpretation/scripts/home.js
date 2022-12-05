@@ -549,7 +549,7 @@ const handleEditActionClick = (e) => {
 
           interpretationServer
             .put("/training/action", {
-              intent: PropertyItem.dataset.intent,
+              intent: intent,
               action: value,
             })
             .then((res) => {

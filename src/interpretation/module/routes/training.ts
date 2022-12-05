@@ -22,10 +22,12 @@ const interfacer = new InterpretationInterfacer();
 
 const router = Router();
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
+  const trainingData = await getTrainingData();
+  console.log("trainingData", trainingData);
   return res.send({
     message: "Successfully retrieved NLU data",
-    data: getTrainingData(),
+    data: trainingData,
   });
 });
 
@@ -50,9 +52,9 @@ router.post("/intent", (req, res) => {
   return res.send(addIntentToText(text, intent, language));
 });
 
-router.post("/action", (req, res) => {
-  const { action, response } = req.body;
-  return res.send(addActionToIntent(action, response));
+router.post("/action", async (req, res) => {
+  const { intent, action } = req.body;
+  return res.send(addActionToIntent(intent, action));
 });
 
 router.post("/response", (req, res) => {

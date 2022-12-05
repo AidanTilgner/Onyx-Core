@@ -11,18 +11,26 @@
     }
   },
   "inquiry": {
-    "how_are_you": { "default": "state.describe_current" },
+    "how_are_you": {
+      "default": "state.describe_current"
+    },
     "obtain_important_information": {
       "default": "share_important_information"
     },
     "obtain_interesting_information": {
       "default": "share_interesting_information"
     },
-    "about_you": { "default": "explain_existence" }
+    "about_you": {
+      "default": "explain_existence"
+    }
   },
   "faq": {
-    "weather": { "default": "weather" },
-    "who_built_you": { "default": "explain_developers" },
+    "weather": {
+      "default": "weather"
+    },
+    "who_built_you": {
+      "default": "explain_developers"
+    },
     "temperature": {
       "default": "weather.temperature",
       "tomorrow": "weather.temperature.tomorrow"
@@ -34,20 +42,37 @@
     }
   },
   "describe_state": {
-    "good": { "default": "respond_to_good_state" },
-    "bad": { "default": "respond_to_bad_state" },
+    "good": {
+      "default": "respond_to_good_state"
+    },
+    "bad": {
+      "default": "respond_to_bad_state"
+    },
     "emotions": {
       "default": "interpret_emotions",
       "good": "respond_to_good_emotions",
       "bad": "respond_to_bad_emotions"
     }
   },
-  "ooga": { "booga": { "default": "ooga_some_boogas" } },
-  "express_opinion": {
-    "disinterest": { "default": "respond_to_opinion.disinterest" }
+  "ooga": {
+    "booga": {
+      "default": "ooga_some_boogas",
+      "mama": "ooga.booga.mama"
+    }
   },
-  "test": { "test": { "test": "test.test" } },
+  "express_opinion": {
+    "disinterest": {
+      "default": "respond_to_opinion.disinterest"
+    }
+  },
+  "test": {
+    "test": {
+      "test": "test.test"
+    }
+  },
   "describe_clothing": {
-    "specific": { "default": "comment_on_clothing.specific" }
+    "specific": {
+      "default": "comment_on_clothing.specific"
+    }
   }
 }
