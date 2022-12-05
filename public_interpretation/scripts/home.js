@@ -1,5 +1,6 @@
 import { setAlert } from "./display.js";
 import { getTrainingData } from "./main.js";
+import { interpretationServer } from "./axiosInstance.js";
 const TestingInput = document.getElementById("testing-input");
 const TestingSubmit = document.getElementById("testing-submit");
 const TestingOutput = document.getElementById("testing-output");
@@ -67,7 +68,7 @@ checkDisplayOutput();
 
 const updateModel = async () => {
   try {
-    const { trained, message } = await axios
+    const { trained, message } = await interpretationServer
       .post("/training/train")
       .then((res) => res.data)
       .catch((err) => {
@@ -93,7 +94,7 @@ updateModel();
 
 const getNLUForInput = async () => {
   try {
-    const { nlu } = await axios
+    const { nlu } = await interpretationServer
       .post("/nlu", {
         text: state.input,
       })
@@ -234,7 +235,7 @@ const UpdateAndGetNLUForInput = async () => {
       return;
     }
 
-    const { nlu } = await axios
+    const { nlu } = await interpretationServer
       .post("/nlu", {
         text: state.input,
       })
@@ -451,7 +452,7 @@ const handleEditIntentClick = (e) => {
           // TestingResponse.innerHTML = `<strong>Response:</strong> loading...`;
           // TestingResponses.innerHTML = `<p class="output-list-title">Responses:</p><span class="output-list-item">loading...</span>`;
 
-          axios
+          interpretationServer
             .put("/training/intent", {
               text: state.input,
               intent: value,
@@ -546,7 +547,7 @@ const handleEditActionClick = (e) => {
           // TestingResponses.innerHTML = `<p class="output-list-title">Responses:</p><span class="output-list-item">loading...</span>`;
           PropertyItem.dataset.value = value;
 
-          axios
+          interpretationServer
             .put("/training/action", {
               intent: PropertyItem.dataset.intent,
               action: value,
@@ -595,7 +596,7 @@ const handleRemoveResponseClick = (e) => {
 
   const action = OutputProperties.dataset.action;
 
-  axios
+  interpretationServer
     .delete("/training/response", {
       data: {
         action: action,
@@ -648,7 +649,7 @@ const handleAddResponseClick = (e) => {
           const { value } = input;
           state.responses.push(value);
 
-          axios
+          interpretationServer
             .post("/training/response", {
               action: action,
               response: value,

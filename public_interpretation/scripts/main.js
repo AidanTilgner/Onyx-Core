@@ -1,4 +1,5 @@
 import { setAlert } from "./display.js";
+import { interpretationServer } from "./axiosInstance.js";
 
 const links = [
   `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />`,
@@ -10,8 +11,8 @@ links.forEach((link) => {
 
 export const getTrainingData = async () => {
   try {
-    const trainingData = await axios
-      .get("/training/")
+    const trainingData = await interpretationServer
+      .get("/training")
       .then((res) => {
         if (res.data.error) {
           setAlert(res.data.error, "danger");

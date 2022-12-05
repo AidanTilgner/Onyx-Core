@@ -14,7 +14,7 @@ const isDev = process.env.NODE_ENV === "development";
 
 if (isDev) {
   console.info("In development mode, allowing training UI");
-  router.use(Express.static("src/interpretation/module/public"));
+  router.use(Express.static("public_interpretation"));
 }
 
 router.use("/api/nlu", checkToken, NLURouter);
