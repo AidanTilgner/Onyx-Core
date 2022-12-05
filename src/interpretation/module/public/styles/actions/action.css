@@ -1,0 +1,65 @@
+.action {
+  list-style-type: none;
+  border-left: 1px solid #eaeaea;
+  display: flex;
+  flex-direction: column;
+  font-weight: 300;
+}
+.action:hover {
+  border-left: 1px solid #c0c0c0;
+}
+.action li {
+  font-size: 16px;
+  margin: 14px 0;
+  cursor: pointer;
+}
+.action li:hover {
+  font-weight: 400;
+}
+.action ul {
+  list-style-type: none;
+  border-left: 1px solid #eaeaea;
+  display: flex;
+  flex-direction: column;
+}
+.action ul:hover {
+  border-left: 1px solid #c0c0c0;
+}
+.action ul li {
+  font-size: 16px;
+  margin: 14px 0;
+  cursor: pointer;
+}
+.action ul li:hover {
+  font-weight: 400;
+}
+.action ul ul {
+  list-style-type: none;
+  border-left: 1px solid #eaeaea;
+  display: flex;
+  flex-direction: column;
+}
+.action ul ul:hover {
+  border-left: 1px solid #c0c0c0;
+}
+
+.type-value__name {
+  position: relative;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.unsupported {
+  position: absolute;
+  left: calc(100% + 14px);
+  color: #a63a1f;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 2px;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  text-align: center;
+  font-weight: 300;
+  width: 125px;
+}/*# sourceMappingURL=action.css.map */

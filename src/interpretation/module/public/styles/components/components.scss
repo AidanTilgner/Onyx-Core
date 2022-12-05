@@ -1,0 +1,41 @@
+@keyframes dropin {
+  0% {
+    transform: translateY(-10vh);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.alert {
+  position: fixed;
+  left: 100px;
+  right: 100px;
+  top: 36px;
+  box-shadow: 0.2px 0.2px 24px 0 rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  padding: 24px 18px;
+  font-size: 18px;
+  font-family: "Inter", sans-serif;
+  border-radius: 5px;
+  font-weight: 400;
+
+  animation-name: dropin;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+}
+
+.alert-success {
+  background-color: rgba(100, 166, 15, 0.5);
+  color: white;
+}
+
+.alert-danger {
+  background-color: rgba(166, 58, 31, 0.5);
+  color: white;
+}

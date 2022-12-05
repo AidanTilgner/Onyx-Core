@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NLU Portal</title>
+    <link rel="stylesheet" href="./styles/main/main.css" />
+    <link rel="stylesheet" href="./styles/components/components.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar">
+      <h2 class="navbar__title">Onyx Interpretation Server</h2>
+      <ul class="navbar__items">
+        <li class="navbar__item">
+          <a href="index.html" class="navbar__link active">Home</a>
+        </li>
+        <li class="navbar__item">
+          <a href="./pages/examples.html" class="navbar__link">Examples</a>
+        </li>
+        <li class="navbar__item">
+          <a href="./pages/actions.html" class="navbar__link">Actions</a>
+        </li>
+      </ul>
+    </nav>
+    <main class="content">
+      <section>
+        <p class="warning">
+          This feature of Onyx is experimental and therefore unstable, use with
+          caution. It could potentionally cause issues with interpretation that
+          will require manual fixes.
+        </p>
+        <h1 class="title">Welcome</h1>
+        <p>
+          This is the Onyx Interpretation Server. It is responsible for all all
+          <strong>Natural Language Processing</strong> performed by the system.
+          This portal allows you to modify the training data and therefore the
+          model. It's effectively a GUI that lets you modify the model.
+        </p>
+        <p>
+          On the other pages, navigatable via the navigation bar above, you'll
+          find the different modifications you can make, as well as explanations
+          as to what they are. If you have questions, please ask them, as this
+          feature is still in development.
+          <strong>You should know what you're doing before using it.</strong>
+        </p>
+      </section>
+      <section>
+        <h1 class="title">Interactive Training</h1>
+        <p class="warning">
+          This feature is not meant to be used in development mode. The server
+          will detect an update and retrain the model every time the training
+          data updates. This causes a full server reload every time you make an
+          update.
+        </p>
+        <p>
+          Here you can test the model with the text input below. Simply type
+          something, press enter, and you'll get a response in the text box. You
+          can then edit the expected intent for the text. Or if you think a
+          different action should map to the intent given, you can edit that
+          too. Finally, if you think a response doesn't fit, or another one
+          should be added to an action, you can edit that too.
+        </p>
+        <span class="tip"
+          >Tip: Check the other list views before changing actions or
+          intents</span
+        >
+        <div class="stage" id="output-stage">
+          <div class="input-group">
+            <input
+              type="text"
+              placeholder="Type something..."
+              class="text-input"
+              id="testing-input"
+            />
+            <button type="button" id="testing-submit">Send</button>
+          </div>
+          <div class="output-box" id="testing-output"></div>
+          <div class="output-properties" id="testing-properties">
+            <div
+              class="output-property"
+              id="testing-intent-container"
+              data-state="intent"
+            >
+              <span id="testing-intent"></span>
+              <div class="icons">
+                <i
+                  class="material-symbols-outlined primary"
+                  title="Edit intent for this text"
+                  id="edit-intent"
+                  >edit</i
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./scripts/main.js"></script>
+    <script type="module" src="./scripts/home.js"></script>
+  </body>
+</html>
