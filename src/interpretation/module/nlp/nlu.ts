@@ -19,8 +19,11 @@ export const getNLUData = async (
   session_id: string,
   lang?: string
 ): Promise<NLUResponse> => {
+  // get the language
   const language = lang || nlu_config.defaultLanguage;
+  // split the input into sentences
   const splitInput = splitInputBySentence(input);
+  // initialize some variables
   const intents: string[] = [];
   const classifications: {
     intent: string;
@@ -28,39 +31,49 @@ export const getNLUData = async (
   }[] = [];
   const entities: Entity[] = [];
   const nluArray: MetaData[] = [];
+  const completedActions: string[] = [];
 
+  // loop through each sentence
   for (const inp of splitInput) {
+    // process the sentence
     const nlu = (await manager.process(language, inp)) as MetaData;
+    // extract some variables
     const {
       intent,
       classifications: inpClassifications,
       entities: inpEntities,
     } = nlu;
-    intents.push(intent);
+    // get intents
+    // get classifications
     inpClassifications.forEach((cl) => {
       if (cl.score > 0.5) {
         classifications.push(cl);
       }
     });
+
+    findSpecialEntities(inp).forEach((ent) => {
+      inpEntities.push(ent);
+    });
     // destructer entities into entities array
     inpEntities.forEach((ent) => {
       entities.push(ent);
     });
+    const { actions } = checkCompletesFields(session_id, inpEntities);
+    if (actions.length) {
+      completedActions.push(...actions);
+      intents.push("fulfilled_form");
+    } else {
+      intents.push(intent);
+    }
+    // push the nlu object into the nlu array
     nluArray.push(nlu);
   }
-
-  findSpecialEntities(input).forEach((ent) => {
-    entities.push(ent);
-  });
 
   if (!intents.length) {
     intents.push(classifications[0].intent);
   }
-  const { actions: completedActions } = checkCompletesFields(
-    session_id,
-    entities
-  );
   const initialActions = intents.map((int) => {
+    if (int === "fulfilled_form") return "no_action";
     return getAction(int);
   });
   const useableActions: string[] = [...completedActions];

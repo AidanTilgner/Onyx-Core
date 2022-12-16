@@ -15,7 +15,7 @@ export const condenseResponses = (responses: string[], session_id?: string) => {
   let response = "";
 
   responses.forEach((res) => {
-    if (res === "custom_message") {
+    if (res === "custom_message" || res === "fulfilled_form") {
       return;
     }
     response += response.length ? ". " + res : res;
