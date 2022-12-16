@@ -5,6 +5,7 @@ const TestingInput = document.getElementById("testing-input");
 const TestingSubmit = document.getElementById("testing-submit");
 const TestingOutput = document.getElementById("testing-output");
 const OutputStage = document.getElementById("output-stage");
+const RetrainButton = document.getElementById("testing-reset");
 
 const state = {
   input: TestingInput.value,
@@ -750,3 +751,7 @@ const getLevenshteinDistance = (a, b) => {
 
   return matrix[b.length][a.length];
 };
+
+RetrainButton.addEventListener("click", (e) => {
+  updateModel();
+});

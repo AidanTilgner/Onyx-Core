@@ -1,5 +1,5 @@
 import { generateToken, verifyRefreshToken } from "../utils/jwt";
-import { getRefreshToken } from "../database/queries/tokens-sdb";
+import { getRefreshToken } from "../database/queries/tokens";
 
 export const refreshToken = async (key: string, refresh_token: string) => {
   try {
@@ -13,24 +13,7 @@ export const refreshToken = async (key: string, refresh_token: string) => {
       };
     }
 
-    const { result, error, message } = await getRefreshToken(key);
-
-    if (!result) {
-      return {
-        error,
-        message,
-        status: 500,
-      };
-    }
-
-    const { value: token } = result;
-
-    if (error) {
-      return {
-        error,
-        message,
-      };
-    }
+    const token = await getRefreshToken(key);
 
     if (!token) {
       return {
