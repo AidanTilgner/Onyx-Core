@@ -12,10 +12,7 @@ import {
   getIntentAndAction,
   getResponse,
 } from "./module/nlp/utils";
-import {
-  getNLUData,
-  unstable_getNLUDataWithoutSession,
-} from "./module/nlp/nlu";
+import { getNLUData } from "./module/nlp/nlu";
 
 class InterpretationInterface extends Interface {
   private initModel: typeof initModel = initModel;
@@ -31,8 +28,6 @@ class InterpretationInterface extends Interface {
   public getIntentAndAction: typeof getIntentAndAction = getIntentAndAction;
   public getResponse: typeof getResponse = getResponse;
   public getNLUData: typeof getNLUData = getNLUData;
-  public getNLUDataWithoutSession: typeof unstable_getNLUDataWithoutSession =
-    unstable_getNLUDataWithoutSession;
   public getTrainingData: typeof getTrainingData = getTrainingData;
   public getExistingActionsWithoutResponse: typeof getExistingActionsWithoutResponse =
     getExistingActionsWithoutResponse;

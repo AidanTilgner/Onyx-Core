@@ -6,7 +6,7 @@ const actions = interfacer.actionsInterface;
 const nlu = interfacer.interpretationInterface;
 
 const getActionResponseFromText = async (text: string) => {
-  const nluData = await nlu.getNLUDataWithoutSession(text);
+  const nluData = await nlu.getNLUData(text, "test");
   const actionResponse = actions.parseAndUseNLU(nluData);
   return actionResponse;
 };

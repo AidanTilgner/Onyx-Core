@@ -1,4 +1,4 @@
-import { getNLUData, unstable_getNLUDataWithoutSession } from "./nlu";
+import { getNLUData } from "./nlu";
 import { condenseResponses, parseBatchActionResponses } from "./utils";
 import { NLUResponse } from "../index.d";
 import InterpretationInterfacer from "interpretation/interfacer";

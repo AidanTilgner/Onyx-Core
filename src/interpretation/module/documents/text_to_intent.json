@@ -1,1 +1,176 @@
-[{"text":"Hello there","intent":"greeting.hello","language":"en"},{"text":"Hi there","intent":"greeting.hello","language":"en"},{"text":"Good morning","intent":"greeting.hello","language":"en"},{"text":"Good afternoon","intent":"greeting.hello","language":"en"},{"text":"Good evening","intent":"greeting.hello","language":"en"},{"text":"Good night","intent":"greeting.goodbye","language":"en"},{"text":"Have a good day","intent":"greeting.goodbye.well_wishing","language":"en"},{"text":"I have to go now","intent":"greeting.goodbye.informative","language":"en"},{"text":"How are you?","intent":"inquiry.how_are_you","language":"en"},{"text":"How are you doing?","intent":"inquiry.how_are_you","language":"en"},{"text":"How are you doing today?","intent":"inquiry.how_are_you","language":"en"},{"text":"What is your state?","intent":"inquiry.how_are_you","language":"en"},{"text":"Anything I should know about?","intent":"inquiry.obtain_important_information","language":"en"},{"text":"Is there any important information?","intent":"inquiry.obtain_important_information","language":"en"},{"text":"Is there anything important going on?","intent":"inquiry.obtain_important_information","language":"en"},{"text":"Anything interesting going on?","intent":"inquiry.obtain_interesting_information","language":"en"},{"text":"I'm looking for something interesting","intent":"inquiry.obtain_interesting_information","language":"en"},{"text":"Tell me about yourself","intent":"inquiry.about_you","language":"en"},{"text":"What are you exactly?","intent":"inquiry.about_you","language":"en"},{"text":"Are you a robot?","intent":"inquiry.about_you","language":"en"},{"text":"What is the weather like?","intent":"faq.weather","language":"en"},{"text":"What is the weather like today?","intent":"faq.weather","language":"en"},{"text":"What is the weather like this morning?","intent":"faq.weather","language":"en"},{"text":"What is the weather like in Salem?","intent":"faq.weather","language":"en"},{"text":"Tell me about the weather today","intent":"faq.weather","language":"en"},{"text":"What is the temperature like?","intent":"faq.temperature","language":"en"},{"text":"What is the temperature tomorrow?","intent":"faq.temperature.tomorrow","language":"en"},{"text":"Describe the weather","intent":"faq.weather","language":"en"},{"text":"Who built you?","intent":"faq.who_built_you","language":"en"},{"text":"Who worked on you?","intent":"faq.who_built_you","language":"en"},{"text":"Where did you come from?","intent":"faq.who_built_you","language":"en"},{"text":"Hello, how are you today?","intent":"greeting.hello.how_are_you","language":"en"},{"text":"I am good","intent":"describe_state.good","language":"en"},{"text":"I am feeling good","intent":"describe_state.emotions.good","language":"en"},{"text":"Ooga booga","intent":"ooga.booga","language":"en"},{"text":"ooga booga","intent":"ooga.booga","language":"en"},{"text":"I strongly dislike math","intent":"express_opinion.disinterest","language":"en"},{"text":"I don't like math","intent":"express_opinion.disinterest","language":"en"},{"text":"What should I wear today?","intent":"faq.what_should_i_wear","language":"en"},{"text":"What should I wear on my date?","intent":"faq.what_should_i_wear.at_event","language":"en"},{"text":"What should I wear with my blue skirt?","intent":"faq.what_should_i_wear.with_item","language":"en"},{"text":"test","intent":"test.test.testing","language":"en"},{"text":"What should I wear with these clothes?","intent":"faq.what_should_i_wear.with_item","language":"en"},{"text":"I'm wearing a dress","intent":"describe_clothing.specific","language":"en"},{"text":"ooga booga. ooga","intent":"ooga.booga","language":"en"},{"text":"ooga booga mama. ooga. Hello there","intent":"ooga.booga.mama","language":"en"}]
+[
+  { "text": "Hello there", "intent": "greeting.hello", "language": "en" },
+  { "text": "Hi there", "intent": "greeting.hello", "language": "en" },
+  { "text": "Good morning", "intent": "greeting.hello", "language": "en" },
+  { "text": "Good afternoon", "intent": "greeting.hello", "language": "en" },
+  { "text": "Good evening", "intent": "greeting.hello", "language": "en" },
+  { "text": "Good night", "intent": "greeting.goodbye", "language": "en" },
+  {
+    "text": "Have a good day",
+    "intent": "greeting.goodbye.well_wishing",
+    "language": "en"
+  },
+  {
+    "text": "I have to go now",
+    "intent": "greeting.goodbye.informative",
+    "language": "en"
+  },
+  { "text": "How are you?", "intent": "inquiry.how_are_you", "language": "en" },
+  {
+    "text": "How are you doing?",
+    "intent": "inquiry.how_are_you",
+    "language": "en"
+  },
+  {
+    "text": "How are you doing today?",
+    "intent": "inquiry.how_are_you",
+    "language": "en"
+  },
+  {
+    "text": "What is your state?",
+    "intent": "inquiry.how_are_you",
+    "language": "en"
+  },
+  {
+    "text": "Anything I should know about?",
+    "intent": "inquiry.obtain_important_information",
+    "language": "en"
+  },
+  {
+    "text": "Is there any important information?",
+    "intent": "inquiry.obtain_important_information",
+    "language": "en"
+  },
+  {
+    "text": "Is there anything important going on?",
+    "intent": "inquiry.obtain_important_information",
+    "language": "en"
+  },
+  {
+    "text": "Anything interesting going on?",
+    "intent": "inquiry.obtain_interesting_information",
+    "language": "en"
+  },
+  {
+    "text": "I'm looking for something interesting",
+    "intent": "inquiry.obtain_interesting_information",
+    "language": "en"
+  },
+  {
+    "text": "Tell me about yourself",
+    "intent": "inquiry.about_you",
+    "language": "en"
+  },
+  {
+    "text": "What are you exactly?",
+    "intent": "inquiry.about_you",
+    "language": "en"
+  },
+  {
+    "text": "Are you a robot?",
+    "intent": "inquiry.about_you",
+    "language": "en"
+  },
+  {
+    "text": "What is the weather like?",
+    "intent": "faq.weather",
+    "language": "en"
+  },
+  {
+    "text": "What is the weather like today?",
+    "intent": "faq.weather",
+    "language": "en"
+  },
+  {
+    "text": "What is the weather like this morning?",
+    "intent": "faq.weather",
+    "language": "en"
+  },
+  {
+    "text": "What is the weather like in Salem?",
+    "intent": "faq.weather",
+    "language": "en"
+  },
+  {
+    "text": "Tell me about the weather today",
+    "intent": "faq.weather",
+    "language": "en"
+  },
+  {
+    "text": "What is the temperature like?",
+    "intent": "faq.temperature",
+    "language": "en"
+  },
+  {
+    "text": "What is the temperature tomorrow?",
+    "intent": "faq.temperature.tomorrow",
+    "language": "en"
+  },
+  { "text": "Describe the weather", "intent": "faq.weather", "language": "en" },
+  { "text": "Who built you?", "intent": "faq.who_built_you", "language": "en" },
+  {
+    "text": "Who worked on you?",
+    "intent": "faq.who_built_you",
+    "language": "en"
+  },
+  {
+    "text": "Where did you come from?",
+    "intent": "faq.who_built_you",
+    "language": "en"
+  },
+  {
+    "text": "Hello, how are you today?",
+    "intent": "greeting.hello.how_are_you",
+    "language": "en"
+  },
+  { "text": "I am good", "intent": "describe_state.good", "language": "en" },
+  {
+    "text": "I am feeling good",
+    "intent": "describe_state.emotions.good",
+    "language": "en"
+  },
+  { "text": "Ooga booga", "intent": "ooga.booga", "language": "en" },
+  { "text": "ooga booga", "intent": "ooga.booga", "language": "en" },
+  {
+    "text": "I strongly dislike math",
+    "intent": "express_opinion.disinterest",
+    "language": "en"
+  },
+  {
+    "text": "I don't like math",
+    "intent": "express_opinion.disinterest",
+    "language": "en"
+  },
+  {
+    "text": "What should I wear today?",
+    "intent": "faq.what_should_i_wear",
+    "language": "en"
+  },
+  {
+    "text": "What should I wear on my date?",
+    "intent": "faq.what_should_i_wear.at_event",
+    "language": "en"
+  },
+  {
+    "text": "What should I wear with my blue skirt?",
+    "intent": "faq.what_should_i_wear.with_item",
+    "language": "en"
+  },
+  { "text": "test", "intent": "test.test.testing", "language": "en" },
+  {
+    "text": "What should I wear with these clothes?",
+    "intent": "faq.what_should_i_wear.with_item",
+    "language": "en"
+  },
+  {
+    "text": "I'm wearing a dress",
+    "intent": "describe_clothing.specific",
+    "language": "en"
+  },
+  { "text": "ooga booga. ooga", "intent": "ooga.booga", "language": "en" },
+  {
+    "text": "ooga booga mama. ooga. Hello there",
+    "intent": "ooga.booga.mama",
+    "language": "en"
+  }
+]
