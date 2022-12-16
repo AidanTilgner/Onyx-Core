@@ -6,6 +6,7 @@ import {
 import nlu_config from "../documents/config.json";
 import { Entity, MetaData, NLUResponse } from "../index.d";
 import { defaultPipeline } from "./pipeline";
+import { findSpecialEntities } from "./entities";
 import {
   condenseResponses,
   getAction,
@@ -48,6 +49,10 @@ export const getNLUData = async (
     nluArray.push(nlu);
   }
 
+  findSpecialEntities(input).forEach((ent) => {
+    entities.push(ent);
+  });
+
   if (!intents.length) {
     intents.push(classifications[0].intent);
   }
@@ -79,17 +84,19 @@ export const getNLUData = async (
     }
 
     if (custom_entities?.has_custom_entities) {
-      custom_entities_mappings[action] = custom_entities;
+      custom_entities_mappings[action] = {
+        ...custom_entities,
+      };
     }
   }
   const responses = useableActions.map(
     (act) => getResponse(act, entities).response
   );
-  const response = condenseResponses(responses, session_id);
+  const nlu_response = condenseResponses(responses, session_id);
   const nlu: NLUResponse = {
     intents,
     actions: useableActions,
-    nlu_response: response,
+    nlu_response: nlu_response,
     responses,
     entities: entities,
     classifications,

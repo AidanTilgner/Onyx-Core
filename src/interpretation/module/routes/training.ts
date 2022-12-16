@@ -24,7 +24,6 @@ const router = Router();
 
 router.get("/", async (req, res) => {
   const trainingData = await getTrainingData();
-  console.log("trainingData", trainingData);
   return res.send({
     message: "Successfully retrieved NLU data",
     data: trainingData,

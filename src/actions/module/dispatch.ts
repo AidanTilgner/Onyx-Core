@@ -10,6 +10,7 @@ import Logger from "utils/logger";
 
 const actionLogger = new Logger("actions");
 
+// ! probably deprecated once chat gets good enough
 export const parseAndUseNLU = async (nlu: NLUResponse) => {
   try {
     const {
@@ -50,7 +51,7 @@ export const parseAndUseNLU = async (nlu: NLUResponse) => {
       const intent = intents[i];
       const action = actions[i];
       const response = responses[i];
-      // TODO: If in production, use the default action instead of saying "action not found"
+
       const actionToPerform = getActionFromActionString(action);
 
       if (!actionToPerform) {

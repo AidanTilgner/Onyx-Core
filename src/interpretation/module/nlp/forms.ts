@@ -53,7 +53,16 @@ export const getActionExpectedEntities = async (
   }[]
 ): Promise<ActionExpectedEntities> => {
   try {
-    const { expected_entities } = await Actions.getActionMetadata(act);
+    const metadata = await Actions.getActionMetadata(act);
+    if (!metadata) {
+      return {
+        found: [],
+        missing: [],
+        has_custom_entities: false,
+        expected_entities: [],
+      };
+    }
+    const { expected_entities } = metadata;
     if (!expected_entities) {
       return {
         found: [],
@@ -81,7 +90,7 @@ export const getActionExpectedEntities = async (
       expected_entities: expected_entities,
     };
   } catch (err) {
-    console.error("Error getting action expected entities");
+    console.error("Error getting action expected entities", err);
     return {
       error: err,
       has_custom_entities: false,

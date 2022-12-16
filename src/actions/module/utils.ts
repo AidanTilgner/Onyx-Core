@@ -42,6 +42,10 @@ export const getActionMetadata = async (act: string) => {
     [key: string]: { [key: string]: any };
   };
 
+  if (!jsonCopy[action] || !jsonCopy[action][subaction]) {
+    return null;
+  }
+
   return jsonCopy[action]?.[subaction] as {
     expected_entities: ExpectedEntities;
   };

@@ -11,10 +11,16 @@ export const getSimpleResponse = async (text: string, session_id: string) => {
 
   const { actions, intents, responses, custom_entities, entities } = data;
 
+  const entitiesObject: { [key: string]: string } = {};
+  for (let i = 0; i < entities.length; i++) {
+    const entity = entities[i];
+    entitiesObject[entity.entity] = entity.option;
+  }
+
   const batchActions = actions.map((act) => {
     return {
       action: act,
-      args: custom_entities,
+      args: entitiesObject,
     };
   });
   const actionResponses = await actionsInterface.performBatchActions(

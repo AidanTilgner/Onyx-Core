@@ -1,10 +1,34 @@
 [
-  { "text": "Hello there", "intent": "greeting.hello", "language": "en" },
-  { "text": "Hi there", "intent": "greeting.hello", "language": "en" },
-  { "text": "Good morning", "intent": "greeting.hello", "language": "en" },
-  { "text": "Good afternoon", "intent": "greeting.hello", "language": "en" },
-  { "text": "Good evening", "intent": "greeting.hello", "language": "en" },
-  { "text": "Good night", "intent": "greeting.goodbye", "language": "en" },
+  {
+    "text": "Hello there",
+    "intent": "greeting.hello",
+    "language": "en"
+  },
+  {
+    "text": "Hi there",
+    "intent": "greeting.hello",
+    "language": "en"
+  },
+  {
+    "text": "Good morning",
+    "intent": "greeting.hello",
+    "language": "en"
+  },
+  {
+    "text": "Good afternoon",
+    "intent": "greeting.hello",
+    "language": "en"
+  },
+  {
+    "text": "Good evening",
+    "intent": "greeting.hello",
+    "language": "en"
+  },
+  {
+    "text": "Good night",
+    "intent": "greeting.goodbye",
+    "language": "en"
+  },
   {
     "text": "Have a good day",
     "intent": "greeting.goodbye.well_wishing",
@@ -15,7 +39,11 @@
     "intent": "greeting.goodbye.informative",
     "language": "en"
   },
-  { "text": "How are you?", "intent": "inquiry.how_are_you", "language": "en" },
+  {
+    "text": "How are you?",
+    "intent": "inquiry.how_are_you",
+    "language": "en"
+  },
   {
     "text": "How are you doing?",
     "intent": "inquiry.how_are_you",
@@ -106,8 +134,16 @@
     "intent": "faq.temperature.tomorrow",
     "language": "en"
   },
-  { "text": "Describe the weather", "intent": "faq.weather", "language": "en" },
-  { "text": "Who built you?", "intent": "faq.who_built_you", "language": "en" },
+  {
+    "text": "Describe the weather",
+    "intent": "faq.weather",
+    "language": "en"
+  },
+  {
+    "text": "Who built you?",
+    "intent": "faq.who_built_you",
+    "language": "en"
+  },
   {
     "text": "Who worked on you?",
     "intent": "faq.who_built_you",
@@ -123,14 +159,26 @@
     "intent": "greeting.hello.how_are_you",
     "language": "en"
   },
-  { "text": "I am good", "intent": "describe_state.good", "language": "en" },
+  {
+    "text": "I am good",
+    "intent": "describe_state.good",
+    "language": "en"
+  },
   {
     "text": "I am feeling good",
     "intent": "describe_state.emotions.good",
     "language": "en"
   },
-  { "text": "Ooga booga", "intent": "ooga.booga", "language": "en" },
-  { "text": "ooga booga", "intent": "ooga.booga", "language": "en" },
+  {
+    "text": "Ooga booga",
+    "intent": "ooga.booga",
+    "language": "en"
+  },
+  {
+    "text": "ooga booga",
+    "intent": "ooga.booga",
+    "language": "en"
+  },
   {
     "text": "I strongly dislike math",
     "intent": "express_opinion.disinterest",
@@ -156,7 +204,11 @@
     "intent": "faq.what_should_i_wear.with_item",
     "language": "en"
   },
-  { "text": "test", "intent": "test.test.testing", "language": "en" },
+  {
+    "text": "test",
+    "intent": "test.test.testing",
+    "language": "en"
+  },
   {
     "text": "What should I wear with these clothes?",
     "intent": "faq.what_should_i_wear.with_item",
@@ -167,10 +219,19 @@
     "intent": "describe_clothing.specific",
     "language": "en"
   },
-  { "text": "ooga booga. ooga", "intent": "ooga.booga", "language": "en" },
+  {
+    "text": "ooga booga. ooga",
+    "intent": "ooga.booga",
+    "language": "en"
+  },
   {
     "text": "ooga booga mama. ooga. Hello there",
     "intent": "ooga.booga.mama",
+    "language": "en"
+  },
+  {
+    "text": "Send a message to Aidan",
+    "intent": "notify.specific_user",
     "language": "en"
   }
 ]

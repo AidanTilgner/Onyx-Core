@@ -16,5 +16,15 @@
         }
       ]
     }
+  },
+  "notifications": {
+    "specific_user": {
+      "expected_entities": [
+        {
+          "type": "user_message",
+          "custom_query": "What do you want to say?"
+        }
+      ]
+    }
   }
 }

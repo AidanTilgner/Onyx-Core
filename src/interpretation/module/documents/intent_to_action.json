@@ -74,5 +74,10 @@
     "specific": {
       "default": "comment_on_clothing.specific"
     }
+  },
+  "notify": {
+    "specific_user": {
+      "default": "notifications.specific_user"
+    }
   }
 }
