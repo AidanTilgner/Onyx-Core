@@ -1,10 +1,20 @@
 import { Router } from "express";
-import { deleteUser, disableUser, getUser } from "../database/queries/users";
-import { addUser, getMe, getUsers, logoutUser } from "../controllers/users";
-import { refreshUser, signInUser } from "../controllers/users";
+import {
+  addUser,
+  getMe,
+  getUsers,
+  logoutUser,
+  refreshUser,
+  signInUser,
+  deleteUser,
+  disableUser,
+  getUser,
+  getUserFields,
+} from "../controllers/users";
 import { authenticateSuperUser, authenticateToken } from "../middleware/auth";
 import { hasRole } from "../utils/auth";
 import { User } from "../interfaces/users";
+import { updateMe } from "../controllers/users";
 
 const router = Router();
 
@@ -55,6 +65,26 @@ router.get("/me", authenticateToken, async (req, res) => {
     return res.send({
       error: err,
       message: "There was an error fetching the user",
+    });
+  }
+});
+
+router.put("/me", async (req, res) => {
+  try {
+    const decoded = req.body.decoded_token;
+    if (typeof decoded === "string") {
+      return res.send({
+        error: decoded,
+        message: "There was an error fetching the user",
+      });
+    }
+    const result = await updateMe(decoded, req.body);
+    res.send(result);
+  } catch (err) {
+    console.error(err);
+    return res.send({
+      error: err,
+      message: "There was an error updating the user",
     });
   }
 });
@@ -160,6 +190,19 @@ router.post("/refresh", async (req, res) => {
     return res.send({
       error: err,
       message: "There was an error refreshing the token",
+    });
+  }
+});
+
+router.get("/create", async (req, res) => {
+  try {
+    const fields = await getUserFields();
+    res.send(fields);
+  } catch (err) {
+    console.error(err);
+    return res.send({
+      error: err,
+      message: "There was an error describing creation of the user",
     });
   }
 });

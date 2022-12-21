@@ -13,9 +13,20 @@ import {
   getUser as getDBUser,
   addUser as addDBUser,
   getUsers as getDBUsers,
+  deleteUser as deleteDBUser,
+  disableUser as disableDBUser,
+  updateUser as updateDBUser,
 } from "../database/queries/users";
 import { AllowedRoles } from "../interfaces/roles";
 import User from "../database/models/user";
+
+export const getUserFields = async () => {
+  const fields = await User.describe();
+  return {
+    fields: fields,
+    message: "User fields fetched successfully",
+  };
+};
 
 export const addUser = async (username: string, role: AllowedRoles) => {
   try {
@@ -226,6 +237,33 @@ export const getMe = async (decoded: User) => {
   }
 };
 
+export const updateMe = async (decoded: User, data: Partial<User>) => {
+  try {
+    const { username } = decoded;
+    const user = await getDBUser(username);
+
+    if (!user) {
+      return {
+        error: "User not found",
+        message: "User not found",
+      };
+    }
+
+    const updatedUser = await updateDBUser(username, data);
+
+    return {
+      result: updatedUser,
+      message: "User updated successfully",
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      error: err,
+      message: "There was an error updating the user",
+    };
+  }
+};
+
 export const getUsers = async () => {
   try {
     const users = await getDBUsers();
@@ -256,6 +294,48 @@ export const getUserAllowedRoles = async (username: string) => {
     return {
       error: err,
       message: "There was an error fetching the user's allowed roles",
+    };
+  }
+};
+
+export const deleteUser = async (username: string) => {
+  try {
+    const deleted = await deleteDBUser(username);
+    if (!deleted) {
+      return {
+        error: "Error deleting user",
+        message: "There was an error deleting the user",
+      };
+    }
+    return {
+      message: "User deleted successfully",
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      error: err,
+      message: "There was an error deleting the user",
+    };
+  }
+};
+
+export const disableUser = async (username: string) => {
+  try {
+    const disabled = await disableDBUser(username);
+    if (!disabled) {
+      return {
+        error: "Error disabling user",
+        message: "There was an error disabling the user",
+      };
+    }
+    return {
+      message: "User disabled successfully",
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      error: err,
+      message: "There was an error disabling the user",
     };
   }
 };
