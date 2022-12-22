@@ -84,6 +84,21 @@ export const checkUserExists = async (username: string): Promise<boolean> => {
   }
 };
 
+export const checkAnyUserExists = async (): Promise<boolean> => {
+  try {
+    const user = await User.findOne({
+      where: {},
+    });
+    if (user) {
+      return true;
+    }
+    return false;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};
+
 export const getUser = async (
   username: string,
   withPassword?: boolean
@@ -146,7 +161,7 @@ export const updateUser = async (
     });
     if (existingUser) {
       await existingUser.update(user);
-      return existingUser;
+      return existingUser.getPublic();
     }
     return null;
   } catch (err) {

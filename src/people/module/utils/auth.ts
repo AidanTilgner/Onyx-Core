@@ -1,5 +1,9 @@
 import { Role, AllowedRoles } from "../interfaces/roles";
-import { getUser, addUser } from "../database/queries/users";
+import {
+  getUser,
+  addUser,
+  checkAnyUserExists,
+} from "../database/queries/users";
 import { writeFileSync } from "fs";
 import { config } from "dotenv";
 config();
@@ -92,8 +96,9 @@ export const initDefaultUser = async () => {
     const { DEFAULT_USERNAME } = process.env;
     if (!DEFAULT_USERNAME) throw new Error("DEFAULT_USERNAME not set");
     const existing = await getUser(DEFAULT_USERNAME);
+    const anyUserExist = await checkAnyUserExists();
 
-    if (existing) {
+    if (existing || anyUserExist) {
       console.info("Default user already exists, not creating");
       return;
     }

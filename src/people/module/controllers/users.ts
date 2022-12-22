@@ -249,6 +249,8 @@ export const updateMe = async (decoded: User, data: Partial<User>) => {
       };
     }
 
+    console.log("Updates: ", data);
+
     const updatedUser = await updateDBUser(username, data);
 
     return {

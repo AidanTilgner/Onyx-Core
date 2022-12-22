@@ -69,7 +69,7 @@ router.get("/me", authenticateToken, async (req, res) => {
   }
 });
 
-router.put("/me", async (req, res) => {
+router.put("/me", authenticateToken, async (req, res) => {
   try {
     const decoded = req.body.decoded_token;
     if (typeof decoded === "string") {
@@ -78,7 +78,10 @@ router.put("/me", async (req, res) => {
         message: "There was an error fetching the user",
       });
     }
-    const result = await updateMe(decoded, req.body);
+    const result = await updateMe(decoded, {
+      ...req.body,
+      decoded_token: undefined,
+    });
     res.send(result);
   } catch (err) {
     console.error(err);
