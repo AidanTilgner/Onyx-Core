@@ -45,7 +45,6 @@ const getTemperature = async (
     const weatherData = await weather.current(coords[0].lat, coords[0].lon);
 
     const formattedCity = city.split(",")[0];
-    console.log("Weather Data: ", weatherData);
     const message = `The temperature in ${formattedCity} is ${weatherData.main.temp} degrees.`;
 
     return {
