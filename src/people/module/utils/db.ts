@@ -2,6 +2,7 @@ import { Model, Sequelize } from "sequelize";
 import { config } from "dotenv";
 import { initUsers } from "../database/models/user";
 import { initTokens } from "../database/models/token";
+import { initNotes } from "../database/models/note";
 
 config();
 
@@ -10,6 +11,7 @@ export const db: {
   models: {
     users: Model | any;
     tokens: Model | any;
+    notes: Model | any;
   };
 } = {
   sequelize: new Sequelize({
@@ -25,6 +27,7 @@ export const db: {
   models: {
     users: null,
     tokens: null,
+    notes: null,
   },
 };
 
@@ -41,5 +44,9 @@ export const initAndSyncTables = async () => {
   await initUsers().then((user) => {
     user.sync();
     db.models.users = user;
+  });
+  await initNotes().then((note) => {
+    note.sync();
+    db.models.notes = note;
   });
 };

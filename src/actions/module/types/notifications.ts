@@ -1,8 +1,11 @@
 import { ActionResponse, ActionArgs } from "../index";
 import { config } from "dotenv";
 import { sendEmail } from "utils/email";
+import ActionsInterfacer from "actions/interfacer";
 
 config();
+
+const people = new ActionsInterfacer().peopleInterface;
 
 export const specific_user = async (
   props: ActionArgs
@@ -11,13 +14,18 @@ export const specific_user = async (
     message = "Onyx would like your attention, check logs for more information.",
     user = process.env.DEFAULT_USERNAME,
     attachments,
-    user_message, // this is probably bad code >:(
+    user_message, // this is probably bad code >:( <-- why did I comment this???
   } = props;
+
+  const username =
+    (await people.dbQueries.userQueries
+      .getUserWithMostSimilarUsername(user)
+      .then((user) => user?.username)) || user;
 
   const html = `
     <div>
         <h1 style="color:#2256f2;">Onyx Notification</h1>
-        <p>Intended for: ${user}</p>
+        <p>Intended for: ${username} | referenced as "${user}"</p>
         <hr />
         <br />
         <p>${user_message ? user_message : message}</p>

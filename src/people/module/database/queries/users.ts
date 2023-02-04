@@ -3,6 +3,7 @@ import {
   generateRandomPassword,
   hashPassword,
 } from "people/module/utils/crypto";
+import { getLevensteinDistance } from "people/module/utils/algorithms";
 
 export const addUser = async (user: {
   username: string;
@@ -241,5 +242,34 @@ export const disableUser = async (username: string): Promise<boolean> => {
   } catch (err) {
     console.error(err);
     return false;
+  }
+};
+
+export const getUserWithMostSimilarUsername = async (
+  username: string
+): Promise<Partial<User> | null> => {
+  try {
+    if (!username) {
+      throw new Error("Username not provided");
+    }
+    const users = await User.findAll({
+      attributes: ["username", "role", "email"],
+    });
+    let mostSimilarUsername: string | null = null;
+    let mostSimilarUsernameDistance = 100;
+    for (const user of users) {
+      const distance = getLevensteinDistance(username, user.username);
+      if (distance < mostSimilarUsernameDistance) {
+        mostSimilarUsernameDistance = distance;
+        mostSimilarUsername = user.username;
+      }
+    }
+    if (mostSimilarUsername) {
+      return getUser(mostSimilarUsername);
+    }
+    return null;
+  } catch (err) {
+    console.error(err);
+    return null;
   }
 };

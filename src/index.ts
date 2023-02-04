@@ -5,6 +5,7 @@ import ActionsRouter from "./actions/router";
 import PeopleRouter from "./people/router";
 import InterpretationInterface from "./interpretation/interface";
 import ProcedureRouter from "./procedures/router";
+import session from "express-session";
 
 const interpretation = new InterpretationInterface();
 
@@ -16,6 +17,14 @@ const app = Express();
 
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "secret",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true },
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Onyx API, feel free to explore!");
