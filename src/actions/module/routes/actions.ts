@@ -8,6 +8,7 @@ import {
   getRecentActions,
 } from "../utils";
 import { generateMetaData } from "../config/metadata";
+import type { Response } from "docs/server";
 
 const router = Router();
 generateMetaData();
@@ -29,12 +30,20 @@ router.post("/", async (req, res) => {
     if (actionResponse) {
       addRecentAction(action);
     }
-    return res.send({
+    const toSend: Response = {
       message: `Action "${action}" executed successfully`,
-      response: actionResponse,
-    });
+      data: actionResponse,
+      status: 200,
+    };
+    return res.send(toSend);
   } catch (err) {
     console.error("Error: ", err);
+    const toSend: Response = {
+      message: `Action failed to execute`,
+      data: err,
+      status: 500,
+    };
+    return res.send(toSend);
   }
 });
 
