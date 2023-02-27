@@ -1,21 +1,28 @@
 import Logger from "utils/logger";
 import nluProcedures from "./defs/nlu";
+import emailProcedures from "./defs/email";
 import ProcedureInterfacer from "procedures/interfacer";
-import { sendEmail } from "utils/email";
+import type { ProcedureArgs, ProcedureFunction } from "./index.d";
 
 const actions = new ProcedureInterfacer().actionsInterface;
 
-const procedures = {
+export const procedures: {
+  [key: string]: ProcedureFunction;
+} = {
   ...nluProcedures,
+  ...emailProcedures,
 };
 
-export const useProcedure = async (procedureName: string, ...args: any[]) => {
+export const useProcedure = async (
+  procedureName: string,
+  props: ProcedureArgs
+) => {
   const procedure = procedures[procedureName];
   if (!procedure) {
     console.error(`Procedure ${procedureName} not found`);
     return null;
   }
-  return await procedure(...args);
+  return await procedure(props);
 };
 
 export const getProcedure = (procedureName: string) => {

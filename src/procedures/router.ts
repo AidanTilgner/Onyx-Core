@@ -8,11 +8,8 @@ const interfacer = new ProcedureInterfacer();
 
 router.post("/procedure/:procedure", async (req, res) => {
   try {
-    const { args } = req.body;
-    const procedureRes = await useProcedure(
-      req.params.procedure,
-      ...(typeof args === "string" ? JSON.parse(args) : args)
-    );
+    const { args } = req.body as { args: { [key: string]: any } };
+    const procedureRes = await useProcedure(req.params.procedure, args);
     if (!procedureRes) {
       return res.status(404).send("Procedure not found");
     }

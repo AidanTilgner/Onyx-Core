@@ -77,6 +77,11 @@ export interface NLUResponse {
   metaData: MetaData[];
 }
 
+export type ExpectedEntities = {
+  type: string;
+  custom_query: string;
+}[];
+
 export interface ActionArgs {
   [key: string]: any;
 }
@@ -88,12 +93,6 @@ export interface ActionResponse {
   data?: any;
   error?: any;
 }
-
-export type ExpectedEntities = {
-  type: string;
-  custom_query: string;
-}[];
-
 export type ActionFunction = (
   props: ActionArgs,
   ...other: any[]
