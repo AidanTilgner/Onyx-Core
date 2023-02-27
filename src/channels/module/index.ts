@@ -39,7 +39,10 @@ export const resolveChannelAction = async (
         result: null,
         code: 404,
       };
-    const result = await actionFunction(args);
+    const result = await actionFunction({
+      ...args,
+      channel,
+    });
     return {
       result,
       code: 200,
