@@ -5,6 +5,7 @@ import ActionsRouter from "./actions/router";
 import PeopleRouter from "./people/router";
 import InterpretationInterface from "./interpretation/interface";
 import ProcedureRouter from "./procedures/router";
+import Channels from "./channels/router";
 import session from "express-session";
 
 const interpretation = new InterpretationInterface();
@@ -27,13 +28,16 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.send("Welcome to the Onyx API, feel free to explore!");
+  res.send({
+    message: "Welcome to Onyx Core.",
+  });
 });
 
 app.use("/interpretation", InterpretationRouter);
 app.use("/actions", ActionsRouter);
 app.use("/people", PeopleRouter);
 app.use("/procedures", ProcedureRouter);
+app.use("/channels", Channels);
 
 app.listen(PORT, () => {
   console.info(`Onyx listening at port: ${PORT}`);

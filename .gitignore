@@ -4,3 +4,4 @@ build/
 .env
 api_keys.json
 storage/
+channels.json
