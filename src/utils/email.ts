@@ -6,19 +6,19 @@ config();
 
 const mailLogger = new Logger("email");
 
-const { MAILGUN_USER, MAILGUN_PASSWORD, MAILGUN_FROM, MAIL_TO } = process.env;
+const { MAIL_USER, MAIL_PASS, MAIL_FROM, MAIL_TO } = process.env;
 
 // create transporter with mailgun credentials
 const transporter = nodemailer.createTransport({
-  service: "Mailgun",
+  service: "Gmail",
   auth: {
-    user: MAILGUN_USER,
-    pass: MAILGUN_PASSWORD,
+    user: MAIL_USER,
+    pass: MAIL_PASS,
   },
 });
 
 const mailOpts = {
-  from: MAILGUN_FROM,
+  from: MAIL_FROM,
 };
 
 export async function sendEmail({

@@ -48,7 +48,7 @@ const handle_business_message_inquiry: ProcedureFunction = async ({
     }. Here's what they said:
         <br />
         <br />
-        ${message}
+        "${message}"
         <br />
         <br />
         You can reply to them at ${email}
