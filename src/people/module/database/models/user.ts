@@ -76,7 +76,7 @@ export default class User extends Model<
     return await bc.compare(password, this.password);
   };
 
-  public getPublic = (): Partial<User> => {
+  public getPublic = () => {
     const { password, ...publicUser } = this.toJSON();
     return publicUser;
   };

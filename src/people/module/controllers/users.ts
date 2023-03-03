@@ -115,9 +115,12 @@ export const signInUser = async (username: string, password: string) => {
     await addRefreshToken(username, refresh_token);
 
     return {
-      access_token,
-      refresh_token,
       message: "User signed in successfully",
+      data: {
+        access_token,
+        refresh_token,
+        user: (user as User).getPublic(),
+      },
     };
   } catch (err) {
     console.error(err);
@@ -140,7 +143,7 @@ export const refreshUser = async (refresh_token: string, username: string) => {
       return {
         error: "Invalid refresh token",
         message: "Invalid refresh token",
-        validated: false,
+        data: { validated: false },
       };
     }
 
@@ -151,7 +154,7 @@ export const refreshUser = async (refresh_token: string, username: string) => {
       return {
         error: "Invalid refresh token",
         message: "Invalid refresh token",
-        validated: false,
+        data: { validated: false },
       };
     }
 
@@ -161,7 +164,7 @@ export const refreshUser = async (refresh_token: string, username: string) => {
       return {
         error: "User not found",
         message: "There was an error fetching the user",
-        validated: false,
+        data: { validated: false },
       };
     }
 
@@ -175,8 +178,7 @@ export const refreshUser = async (refresh_token: string, username: string) => {
 
     return {
       message: "User authenticated successfully",
-      access_token: new_access_token,
-      validated: true,
+      data: { validated: true, access_token: new_access_token },
     };
   } catch (err) {
     console.error(err);
@@ -214,7 +216,7 @@ export const getMe = async (decoded: User) => {
     const user = await getDBUser(username);
     const allowedRoles = await getAllowedRoles(username);
 
-    if (!user) {
+    if (!user || user === undefined) {
       return {
         error: "User not found",
         message: "User not found",
@@ -222,7 +224,7 @@ export const getMe = async (decoded: User) => {
     }
 
     return {
-      result: {
+      data: {
         ...user,
         allowed_roles: allowedRoles,
       },

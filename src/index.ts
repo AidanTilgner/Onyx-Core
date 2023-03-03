@@ -7,14 +7,24 @@ import InterpretationInterface from "./interpretation/interface";
 import ProcedureRouter from "./procedures/router";
 import Channels from "./channels/router";
 import session from "express-session";
+import cors from "cors";
 
 const interpretation = new InterpretationInterface();
 
 config();
 interpretation.initNLU();
 
+const spaURL = process.env.SPA_URL || "";
+
 const { PORT } = process.env;
 const app = Express();
+
+const corsOptions = {
+  origin: spaURL,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: true }));
