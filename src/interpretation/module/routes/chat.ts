@@ -22,7 +22,10 @@ router.post("/", async (req, res) => {
 
   const data = await getSimpleResponse(message, session_id);
 
-  return res.status(200).json(data);
+  return res.status(200).json({
+    session_id,
+    data,
+  });
 });
 
 export default router;
