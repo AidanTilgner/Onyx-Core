@@ -79,5 +79,16 @@
     "specific_user": {
       "default": "notifications.specific_user"
     }
+  },
+  "notes": {
+    "add_user_note": {
+      "default": "notes.add_user_note"
+    },
+    "get_user_notes": {
+      "default": "notes.get_user_notes"
+    },
+    "get_most_similar_user_note": {
+      "default": "notes.get_most_similar_user_note"
+    }
   }
 }

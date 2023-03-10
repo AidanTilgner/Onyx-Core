@@ -1,18 +1,19 @@
 import { Interface } from "docs/interfaces";
 import { initDefaultUser } from "./module/utils/auth";
 import { initIO } from "./module/utils/socket-io";
-import { initDB } from "./module/utils/db";
+import { database } from "./module/database";
 import {
   authenticateToken,
   authenticateSuperUser,
   authenticateHyperUser,
 } from "./module/middleware/auth";
+import { trackSession } from "./module/middleware/session";
 import dbQueries from "./module/database/queries";
 
 class PeopleInterface extends Interface {
   public initDefaultUser = initDefaultUser;
-  public initDB = initDB;
   public initIO = initIO;
+  public datasource = database;
   public dbQueries = dbQueries;
 
   constructor() {
@@ -24,6 +25,7 @@ class PeopleInterface extends Interface {
       authenticateToken,
       authenticateSuperUser,
       authenticateHyperUser,
+      trackSession,
     };
   }
 }

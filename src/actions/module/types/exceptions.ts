@@ -14,8 +14,8 @@ export const action_not_found = async (
 ): Promise<ActionResponse> => {
   console.error("Exception: No action found for that action.", props.error);
   return {
-    error: "There was an error performing that action.",
-    action_response: "There was an error performing that action.",
+    error: "The action requested was not found.",
+    action_response: "The action requested was not found.",
     action_performed: "exception.action_not_found",
     success: false,
   };
@@ -24,8 +24,8 @@ export const action_not_found = async (
 export const no_action = async (props: ActionArgs): Promise<ActionResponse> => {
   console.error("Exception:", props.error);
   return {
-    error: "There was an error performing that action.",
-    action_response: "There was an error performing that action.",
+    error: "There is no action associated.",
+    action_response: "There is no action associated.",
     action_performed: "exception.no_action",
     success: false,
   };

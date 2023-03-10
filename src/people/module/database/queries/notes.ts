@@ -1,8 +1,9 @@
-import Note from "../models/note";
+import { database, entities } from "../index";
 import {
   getLevensteinDistance,
   isSimilarEnough,
 } from "people/module/utils/algorithms";
+import { Note } from "../models/note";
 
 export const addNote = async (
   title: string,
@@ -10,11 +11,20 @@ export const addNote = async (
   userId: number
 ): Promise<Note | null> => {
   try {
-    const newNote = await Note.create({
-      title: title,
-      content: content,
-      userId: userId,
+    const newNote = new entities.Note();
+    newNote.title = title;
+    newNote.content = content;
+    await database.manager.save(newNote);
+    const user = await database.manager.findOne(entities.User, {
+      where: {
+        id: userId,
+      },
     });
+    if (!user) {
+      return null;
+    }
+    user.notes = [...(user.notes || []), newNote];
+    await database.manager.save(user);
     return newNote;
   } catch (err) {
     console.error(err);
@@ -27,12 +37,16 @@ export const getNote = async (
   userId: number
 ): Promise<Note | null> => {
   try {
-    const note = await Note.findOne({
+    const user = await database.manager.findOne(entities.User, {
       where: {
-        title: title,
-        userId: userId,
+        id: userId,
       },
+      relations: ["notes"],
     });
+    if (!user) {
+      return null;
+    }
+    const note = user.notes.find((note) => note.title === title);
     if (!note) {
       return null;
     }
@@ -48,21 +62,18 @@ export const getMostSimilarNote = async (
   userId: number
 ): Promise<Note | null> => {
   try {
-    const notes = await Note.findAll({
-      where: {
-        userId: userId,
-      },
-    });
+    const notes = await getNotes(userId);
+    console.log("Getting note similar to:", title);
     if (!notes) {
       return null;
     }
-    let min = 1000;
+    let minDistance = Infinity;
     let minNote: Note | null = null;
     for (let i = 0; i < notes.length; i++) {
       const note = notes[i];
-      const distance = getLevensteinDistance(title, note.title);
-      if (distance < min) {
-        min = distance;
+      const distance = getLevensteinDistance(note.title, title);
+      if (distance < minDistance) {
+        minDistance = distance;
         minNote = note;
       }
     }
@@ -75,11 +86,16 @@ export const getMostSimilarNote = async (
 
 export const getNotes = async (userId: number): Promise<Note[] | null> => {
   try {
-    const notes = await Note.findAll({
+    const user = await database.manager.findOne(entities.User, {
       where: {
-        userId: userId,
+        id: userId,
       },
+      relations: ["notes"],
     });
+    if (!user) {
+      return null;
+    }
+    const notes = user.notes;
     if (!notes) {
       return null;
     }
@@ -96,11 +112,7 @@ export const getNotesSimilarTo = async (
   userId: number
 ): Promise<Note[] | null> => {
   try {
-    const notes = await Note.findAll({
-      where: {
-        userId: userId,
-      },
-    });
+    const notes = await getNotes(userId);
     if (!notes) {
       return null;
     }
@@ -124,17 +136,12 @@ export const updateNote = async (
   userId: number
 ): Promise<Note | null> => {
   try {
-    const note = await Note.findOne({
-      where: {
-        title: title,
-        userId: userId,
-      },
-    });
+    const note = await getNote(title, userId);
     if (!note) {
       return null;
     }
     note.content = content;
-    await note.save();
+    await database.manager.save(note);
     return note;
   } catch (err) {
     console.error(err);
@@ -153,7 +160,7 @@ export const appendNote = async (
   }
 
   note.content += content;
-  await note.save();
+  await database.manager.save(note);
   return note;
 };
 
@@ -162,16 +169,11 @@ export const deleteNote = async (
   userId: number
 ): Promise<boolean> => {
   try {
-    const note = await Note.findOne({
-      where: {
-        title: title,
-        userId: userId,
-      },
-    });
+    const note = await getNote(title, userId);
     if (!note) {
       return false;
     }
-    await note.destroy();
+    await database.manager.remove(note);
     return true;
   } catch (err) {
     console.error(err);

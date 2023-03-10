@@ -22,5 +22,8 @@
   "exception.no_action",
   "comment_on_clothing.specific",
   "ooga.booga.mama",
-  "notifications.specific_user"
+  "notifications.specific_user",
+  "notes.add_user_note",
+  "notes.get_user_notes",
+  "notes.get_most_similar_user_note"
 ]

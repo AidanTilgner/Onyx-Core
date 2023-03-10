@@ -1,14 +1,15 @@
-import Token from "../models/token";
+import { database, entities } from "../index";
+import { Token } from "../models/token";
 
 export const addRefreshToken = async (
   key: string,
   token: string
 ): Promise<Token | null> => {
   try {
-    const newToken = await Token.create({
-      key: key,
-      value: token,
-    });
+    const newToken = new entities.Token();
+    newToken.key = key;
+    newToken.value = token;
+    await database.manager.save(newToken);
     return newToken;
   } catch (err) {
     console.error(err);
@@ -18,7 +19,7 @@ export const addRefreshToken = async (
 
 export const getRefreshToken = async (key: string): Promise<Token | null> => {
   try {
-    const token = await Token.findOne({
+    const token = await database.manager.findOne(entities.Token, {
       where: {
         key: key,
       },
@@ -32,13 +33,9 @@ export const getRefreshToken = async (key: string): Promise<Token | null> => {
 
 export const deleteRefreshToken = async (key: string): Promise<boolean> => {
   try {
-    const token = await Token.findOne({
-      where: {
-        key: key,
-      },
-    });
+    const token = await getRefreshToken(key);
     if (token) {
-      await token.destroy();
+      await database.manager.remove(token);
       return true;
     }
     return false;

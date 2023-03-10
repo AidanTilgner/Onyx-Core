@@ -13,15 +13,17 @@ interface Question {
   value: string;
 }
 
+export interface OpenQuestion {
+  forms: {
+    name: string;
+    fields: Question[];
+    action: string;
+    complete: boolean;
+  }[];
+}
+
 interface OpenQuestions {
-  [session_id: string]: {
-    forms: {
-      name: string;
-      fields: Question[];
-      action: string;
-      complete: boolean;
-    }[];
-  };
+  [session_id: string]: OpenQuestion;
 }
 
 const openQuestions: OpenQuestions = {};
@@ -211,6 +213,8 @@ export const checkCompletesFields = (
     };
   }
 
+  const completedForms: OpenQuestion["forms"] = [];
+
   for (const form of forms) {
     let complete = true;
     for (const field of form.fields) {
@@ -226,10 +230,12 @@ export const checkCompletesFields = (
     form.complete = complete;
     if (complete) {
       actions.push(form.action);
+      completedForms.push(form);
       filterCompletedForms(session_id);
     }
   }
-  return { actions };
+
+  return { actions, completed_forms: completedForms };
 };
 
 export const filterCompletedForms = (session_id: string) => {

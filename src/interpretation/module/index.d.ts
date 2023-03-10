@@ -1,3 +1,4 @@
+import { OpenQuestion } from "./nlp/forms";
 export type TextToIntent = {
   text: string;
   intent: string;
@@ -83,6 +84,7 @@ export interface NLUResponse {
   nlu_response: string;
   responses: string[];
   entities: Entity[];
+  completed_forms: OpenQuestion["forms"];
   classifications: { intent: string; score: number }[];
   custom_entities: { [action: string]: string | number };
   initial_input: string;

@@ -233,5 +233,40 @@
     "text": "Send a message to Aidan",
     "intent": "notify.specific_user",
     "language": "en"
+  },
+  {
+    "text": "Add a note for me",
+    "intent": "notes.add_user_note",
+    "language": "en"
+  },
+  {
+    "text": "Add a note",
+    "intent": "notes.add_user_note",
+    "language": "en"
+  },
+  {
+    "text": "Get me my notes",
+    "intent": "notes.get_user_notes",
+    "language": "en"
+  },
+  {
+    "text": "Show me my notes",
+    "intent": "notes.get_user_notes",
+    "language": "en"
+  },
+  {
+    "text": "Find a note",
+    "intent": "notes.get_most_similar_user_note",
+    "language": "en"
+  },
+  {
+    "text": "Get a similar note",
+    "intent": "notes.get_most_similar_user_note",
+    "language": "en"
+  },
+  {
+    "text": "Help me find a note",
+    "intent": "notes.get_most_similar_user_note",
+    "language": "en"
   }
 ]

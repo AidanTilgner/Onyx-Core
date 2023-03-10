@@ -9,12 +9,18 @@ const router = Router();
 
 const people = new PeopleInterface();
 
-const { initDB, initDefaultUser } = people;
+const { datasource, initDefaultUser } = people;
 
 config();
-initDB().then((res) => {
-  initDefaultUser();
-});
+datasource
+  .initialize()
+  .then((res) => {
+    console.log("Database initialized");
+    initDefaultUser();
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 router.use("/api/auth", AuthRouter);
 router.use("/api/users", UsersRouter);

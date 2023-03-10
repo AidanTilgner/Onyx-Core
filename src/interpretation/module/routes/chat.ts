@@ -14,13 +14,12 @@ router.post("/", async (req, res) => {
     });
   }
 
-  const session_id: string =
-    req.body.session_id ||
-    req.query.session_id ||
-    req.headers["x-session-id"] ||
-    createSession().id;
+  const peopleSession = await req.body.session;
 
-  const data = await getSimpleResponse(message, session_id);
+  const session_id: string = peopleSession.id;
+  const user_id: number = peopleSession.user_id;
+
+  const data = await getSimpleResponse(message, session_id, user_id);
 
   return res.status(200).json({
     session_id,

@@ -73,4 +73,54 @@ const entitiesToExtract = [
       /Tell ([\w\s]+) to ([\w\s]+)/g,
     ],
   },
+  {
+    type: "note_title",
+    regex: [
+      // call it...
+      // the title is...
+      // the title of the note is...
+      // the name is...
+      /Call it ([\w\s]+)/g,
+      /The title is ([\w\s]+)/g,
+      /The title of the note is ([\w\s]+)/g,
+      /The name is ([\w\s]+)/g,
+    ],
+  },
+  {
+    type: "note_content",
+    regex: [
+      // the content is...
+      // the content of the note is...
+      // the note is...
+      /The content is ([\w\s]+)/g,
+      /the content is ([\w\s]+)/g,
+      /The content of the note is ([\w\s]+)/g,
+      /the content is ([\w\s]+)/g,
+      /The note is ([\w\s]+)/g,
+      /the note ([\w\s]+)/g,
+      /It should say ([\w\s]+)/g,
+      /it should say ([\w\s]+)/g,
+    ],
+  },
+  {
+    type: "note_similar",
+    regex: [
+      // similar to ...
+      // similar to the note ...
+      // similar to the note called ...
+      // similar to the note called <title>
+      // its similar to ...
+      // find a note called ...
+      // find a note called <title>
+      // find a note like
+      /similar to ([\w\s]+)/g,
+      /similar to the note ([\w\s]+)/g,
+      /similar to the note called ([\w\s]+)/g,
+      /similar to the note called ([\w\s]+)/g,
+      /its similar to ([\w\s]+)/g,
+      /find a note called ([\w\s]+)/g,
+      /find a note called ([\w\s]+)/g,
+      /find a note like ([\w\s]+)/g,
+    ],
+  },
 ];

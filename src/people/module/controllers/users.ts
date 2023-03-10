@@ -18,10 +18,11 @@ import {
   updateUser as updateDBUser,
 } from "../database/queries/users";
 import { AllowedRoles } from "../interfaces/roles";
-import User from "../database/models/user";
+import { User } from "../database/models/user";
+import { database } from "../database/index";
 
 export const getUserFields = async () => {
-  const fields = await User.describe();
+  const fields = User.describe();
   return {
     fields: fields,
     message: "User fields fetched successfully",

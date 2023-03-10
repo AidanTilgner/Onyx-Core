@@ -1,4 +1,5 @@
-import User from "../models/user";
+import { database, entities } from "../index";
+import { User } from "../models/user";
 import {
   generateRandomPassword,
   hashPassword,
@@ -47,12 +48,12 @@ export const addUser = async (user: {
         generated_password: null,
       };
     }
-    const newUser = await User.create({
-      username: username,
-      role: role,
-      password: hashed,
-      disabled: false,
-    });
+    const newUser = new entities.User();
+    newUser.username = username;
+    newUser.role = role;
+    newUser.password = hashed;
+    newUser.disabled = false;
+    await database.manager.save(newUser);
 
     return { user: newUser, generated_password: usePassword };
   } catch (err) {
@@ -70,7 +71,7 @@ export const checkUserExists = async (username: string): Promise<boolean> => {
     if (!username) {
       throw new Error("Username not provided");
     }
-    const user = await User.findOne({
+    const user = await database.manager.findOne(entities.User, {
       where: {
         username: username,
       },
@@ -87,7 +88,7 @@ export const checkUserExists = async (username: string): Promise<boolean> => {
 
 export const checkAnyUserExists = async (): Promise<boolean> => {
   try {
-    const user = await User.findOne({
+    const user = await database.manager.findOne(entities.User, {
       where: {},
     });
     if (user) {
@@ -108,7 +109,7 @@ export const getUser = async (
     if (!username) {
       throw new Error("Username not provided");
     }
-    const user = await User.findOne({
+    const user = await database.manager.findOne(entities.User, {
       where: {
         username: username,
       },
@@ -119,6 +120,7 @@ export const getUser = async (
     if (withPassword) {
       return user;
     }
+
     return user.getPublic();
   } catch (err) {
     console.error(err);
@@ -131,13 +133,13 @@ export const deleteUser = async (username: string): Promise<boolean> => {
     if (!username) {
       throw new Error("Username not provided");
     }
-    const user = await User.findOne({
+    const user = await database.manager.findOne(entities.User, {
       where: {
         username: username,
       },
     });
     if (user) {
-      await user.destroy();
+      await database.manager.remove(user);
       return true;
     }
     return false;
@@ -155,13 +157,19 @@ export const updateUser = async (
     if (!username) {
       throw new Error("Username not provided");
     }
-    const existingUser = await User.findOne({
+    const existingUser = await database.manager.findOne(User, {
       where: {
         username: username,
       },
     });
     if (existingUser) {
-      await existingUser.update(user);
+      await database.manager.update(
+        User,
+        {
+          username: username,
+        },
+        user
+      );
       return existingUser.getPublic();
     }
     return null;
@@ -179,14 +187,22 @@ export const updateRole = async (
     if (!username) {
       throw new Error("Username not provided");
     }
-    const existingUser = await User.findOne({
+    const existingUser = await database.manager.findOne(User, {
       where: {
         username: username,
       },
     });
     if (existingUser) {
-      await existingUser.update({ role: role });
-      return existingUser;
+      await database.manager.update(
+        User,
+        {
+          username: username,
+        },
+        {
+          role: role,
+        }
+      );
+      return existingUser.getPublic();
     }
     return null;
   } catch (err) {
@@ -197,8 +213,9 @@ export const updateRole = async (
 
 export const getUsers = async (): Promise<Partial<User>[]> => {
   try {
-    const users = await User.findAll({
-      attributes: ["username", "role", "email"],
+    const users = await database.manager.find(User, {
+      where: {},
+      select: ["username", "role", "email"],
     });
     return users;
   } catch (err) {
@@ -211,11 +228,11 @@ export const getUsersWithRole = async (
   role: string
 ): Promise<Partial<User>[]> => {
   try {
-    const users = await User.findAll({
+    const users = await database.manager.find(User, {
       where: {
         role: role,
       },
-      attributes: ["username", "role", "email"],
+      select: ["username", "role", "email"],
     });
     return users;
   } catch (err) {
@@ -229,13 +246,21 @@ export const disableUser = async (username: string): Promise<boolean> => {
     if (!username) {
       throw new Error("Username not provided");
     }
-    const user = await User.findOne({
+    const user = await database.manager.findOne(User, {
       where: {
         username: username,
       },
     });
     if (user) {
-      await user.update({ disabled: true });
+      await database.manager.update(
+        User,
+        {
+          username: username,
+        },
+        {
+          disabled: true,
+        }
+      );
       return true;
     }
     return false;
@@ -252,8 +277,8 @@ export const getUserWithMostSimilarUsername = async (
     if (!username) {
       throw new Error("Username not provided");
     }
-    const users = await User.findAll({
-      attributes: ["username", "role", "email"],
+    const users = await database.manager.find(User, {
+      select: ["username", "role", "email"],
     });
     let mostSimilarUsername: string | null = null;
     let mostSimilarUsernameDistance = 100;

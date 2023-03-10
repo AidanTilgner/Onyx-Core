@@ -2,6 +2,7 @@ import { manager } from ".";
 import {
   checkCompletesFields,
   checkOpensFormAndOpenIfNecessary,
+  OpenQuestion,
 } from "./forms";
 import nlu_config from "../documents/config.json";
 import { Entity, MetaData, NLUResponse } from "../index.d";
@@ -32,6 +33,7 @@ export const getNLUData = async (
   const entities: Entity[] = [];
   const nluArray: MetaData[] = [];
   const completedActions: string[] = [];
+  const completedForms: OpenQuestion["forms"] = [];
 
   // loop through each sentence
   for (const inp of splitInput) {
@@ -58,7 +60,13 @@ export const getNLUData = async (
     inpEntities.forEach((ent) => {
       entities.push(ent);
     });
-    const { actions } = checkCompletesFields(session_id, inpEntities);
+    const { actions, completed_forms } = checkCompletesFields(
+      session_id,
+      inpEntities
+    );
+    if (completed_forms?.length) {
+      completedForms.push(...completed_forms);
+    }
     if (actions.length) {
       completedActions.push(...actions);
       intents.push("fulfilled_form");
@@ -112,6 +120,7 @@ export const getNLUData = async (
     nlu_response: nlu_response,
     responses,
     entities: entities,
+    completed_forms: completedForms,
     classifications,
     custom_entities: custom_entities_mappings,
     initial_input: input,

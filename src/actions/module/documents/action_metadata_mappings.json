@@ -26,5 +26,27 @@
         }
       ]
     }
+  },
+  "notes": {
+    "add_user_note": {
+      "expected_entities": [
+        {
+          "type": "note_title",
+          "custom_query": "What is the title of the note?"
+        },
+        {
+          "type": "note_content",
+          "custom_query": "What should the note say?"
+        }
+      ]
+    },
+    "get_most_similar_user_note": {
+      "expected_entities": [
+        {
+          "type": "note_similar",
+          "custom_query": "What is the title similar to?"
+        }
+      ]
+    }
   }
 }
