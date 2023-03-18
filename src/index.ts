@@ -1,18 +1,34 @@
 import Express from "express";
 import { config } from "dotenv";
-import InterpretationRouter from "./interpretation/router";
-import ActionsRouter from "./actions/router";
-import PeopleRouter from "./people/router";
-import InterpretationInterface from "./interpretation/interface";
-import ProcedureRouter from "./procedures/router";
-import Channels from "./channels/router";
 import session from "express-session";
 import cors from "cors";
+import DataSourceInterface from "utilities/datasource/interface";
+import ActionsInterface from "utilities/actions/interface";
+import InterpretationInterface from "utilities/interpretation/interface";
 
+import "reflect-metadata";
+
+// * Interaction Modes
+import BotRoutes from "interaction_modes/bot/routes";
+import ChannelRoutes from "interaction_modes/channels/routes";
+
+const datasource = new DataSourceInterface();
 const interpretation = new InterpretationInterface();
+const actions = new ActionsInterface();
 
 config();
-interpretation.initNLU();
+
+datasource.initDB().then(() => {
+  console.info("Database initialized.");
+});
+
+interpretation.initNLU().then(() => {
+  console.info("NLU initialized.");
+});
+
+actions.initActions().then(() => {
+  console.info("Actions initialized.");
+});
 
 const spaURL = process.env.SPA_URL || "";
 
@@ -43,11 +59,8 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/interpretation", InterpretationRouter);
-app.use("/actions", ActionsRouter);
-app.use("/people", PeopleRouter);
-app.use("/procedures", ProcedureRouter);
-app.use("/channels", Channels);
+app.use("/bot", BotRoutes);
+app.use("/channels", ChannelRoutes);
 
 app.listen(PORT, () => {
   console.info(`Onyx listening at port: ${PORT}`);

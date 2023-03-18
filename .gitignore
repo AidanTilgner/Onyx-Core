@@ -5,3 +5,4 @@ build/
 api_keys.json
 storage/
 channels.json
+dist
