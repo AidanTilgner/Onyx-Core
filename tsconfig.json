@@ -33,10 +33,12 @@
     "paths": {
       "interaction_modes/*": ["./interaction_modes/*"],
       "docs/*": ["./docs/*"],
-      "utitlies": ["./utitlies"],
+      "utitlies/*": ["./utitlies"],
+      "libs/*": ["./libs/*"],
+      "apps/*": ["./apps/*"],
       "channels": ["../channels.json"],
       "api_keys": ["../api_keys.json"],
-      "libs": ["./libs/*"]
+      "locations_local": ["../locations.local.json"]
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like `./node_modules/@types`. */

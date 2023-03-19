@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { CustomSessionData } from "libs/session";
 import BotInterfacer from "./interfacer";
-
+import AppRoutes from "apps/routes";
 const interfacer = new BotInterfacer();
 const { auth } = interfacer;
 
@@ -14,6 +14,8 @@ router.get("/", auth.useMiddleware().authenticateToken, (req, res) => {
     message: "This is Onyx, how may I help you?",
   });
 });
+
+router.use("/apps", auth.useMiddleware().authenticateToken, AppRoutes);
 
 router.post("/authenticate/as_user", async (req, res) => {
   try {

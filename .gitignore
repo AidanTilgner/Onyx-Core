@@ -1,8 +1,10 @@
 node_modules
 build/
-.secrets
+*.secrets*
 .env
 api_keys.json
 storage/
 channels.json
 dist
+locations.local.config.json
+*.scratch.*
