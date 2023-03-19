@@ -2,12 +2,18 @@ import { DataSource } from "typeorm";
 import { config } from "dotenv";
 import { Post } from "./models/post";
 import { Tag } from "./models/tag";
+import { ExampleReader } from "./models/reader";
+import { Author } from "./models/author";
+import { Prompt } from "./models/prompt";
 
 config();
 
 export const entities = {
   Post,
   Tag,
+  ExampleReader,
+  Author,
+  Prompt,
 };
 
 export const database = new DataSource({

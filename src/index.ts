@@ -5,6 +5,7 @@ import cors from "cors";
 import DataSourceInterface from "utilities/datasource/interface";
 import ActionsInterface from "utilities/actions/interface";
 import InterpretationInterface from "utilities/interpretation/interface";
+import AppsInterface from "apps/interface";
 
 import "reflect-metadata";
 
@@ -15,6 +16,7 @@ import ChannelRoutes from "interaction_modes/channels/routes";
 const datasource = new DataSourceInterface();
 const interpretation = new InterpretationInterface();
 const actions = new ActionsInterface();
+const apps = new AppsInterface();
 
 config();
 
@@ -28,6 +30,10 @@ interpretation.initNLU().then(() => {
 
 actions.initActions().then(() => {
   console.info("Actions initialized.");
+});
+
+apps.initializeApps().then(() => {
+  console.info("Apps initialized.");
 });
 
 const spaURL = process.env.SPA_URL || "";
