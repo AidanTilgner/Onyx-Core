@@ -1,0 +1,1 @@
+import { initializeDB } from "./database";

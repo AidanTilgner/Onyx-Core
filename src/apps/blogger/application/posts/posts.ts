@@ -1,6 +1,6 @@
-export const createBlogPost = async ({}: {
+export const createInitialBlogPost = async (post: {
   title: string;
   description: string;
-  tags: string[];
   important_points: string[];
+  author: string;
 }) => {};
