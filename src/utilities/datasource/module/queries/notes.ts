@@ -60,7 +60,7 @@ export const getMostSimilarNote = async (
 ): Promise<Note | null> => {
   try {
     const notes = await getNotes(userId);
-    console.log("Getting note similar to:", title);
+
     if (!notes) {
       return null;
     }

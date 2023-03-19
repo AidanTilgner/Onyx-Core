@@ -2,6 +2,11 @@ import { Router } from "express";
 import { getChannels, resolveChannelAction } from "./module";
 import ChannelsInterfacer from "./interfacer";
 import type { ChannelActionBody } from "./module/index.d";
+import {
+  verifyChannel,
+  verifyChannelAppPermission,
+} from "./module/middleware/auth";
+import AppsRouter from "apps/routes";
 
 const router = Router();
 
@@ -22,6 +27,13 @@ router.get("/", people.useMiddleware().authenticateToken, async (req, res) => {
     });
   }
 });
+
+router.use(
+  "/:channel/apps",
+  verifyChannel,
+  verifyChannelAppPermission,
+  AppsRouter
+);
 
 router.post("/:channel", async (req, res) => {
   try {

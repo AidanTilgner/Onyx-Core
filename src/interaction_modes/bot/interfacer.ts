@@ -4,8 +4,6 @@ import AuthInterface from "utilities/auth/interface";
 import ActionsInterface from "utilities/actions/interface";
 import InterpretationInterface from "utilities/interpretation/interface";
 
-console.log("ActionsInterface", ActionsInterface);
-
 class BotInterfacer extends Interfacer {
   public datasource = new DataSourceInterface();
   public auth = new AuthInterface();

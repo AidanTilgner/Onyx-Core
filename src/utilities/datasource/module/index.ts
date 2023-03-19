@@ -4,6 +4,7 @@ import { User } from "./models/user";
 import { Token } from "./models/token";
 import { Note } from "./models/note";
 import { Interest } from "./models/interest";
+import { seed } from "./seeders";
 
 config();
 
@@ -24,3 +25,15 @@ export const database = new DataSource({
   synchronize: true,
   entities: Object.values(entities),
 });
+
+export const initializeDB = async () => {
+  database
+    .initialize()
+    .then(() => {
+      console.info("Database initialized");
+      seed();
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};

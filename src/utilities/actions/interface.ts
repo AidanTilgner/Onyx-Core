@@ -14,7 +14,6 @@ import {
   performBatchActions,
 } from "./module/dispatch";
 
-console.log("I exist!");
 class ActionsInterface extends Interface {
   constructor() {
     super("Actions");

@@ -1,4 +1,5 @@
 export type AllowedModules = "actions";
+export type AllowedApps = "blogger";
 
 export interface Channels {
   [key: string]: {
@@ -6,7 +7,11 @@ export interface Channels {
     permissions: {
       modules: {
         name: string;
-        actions_allowed: string[];
+        actions_allowed: string[] | "all";
+      }[];
+      apps: {
+        name: string;
+        actions_allowed: string[] | "all";
       }[];
     };
   };

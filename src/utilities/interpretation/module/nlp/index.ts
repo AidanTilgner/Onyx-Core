@@ -57,7 +57,7 @@ export const trainModel = async () => {
     // ! Right now there's no point in saving this because it trains every load. However, this is how it would be done, and in production we might want to load from the saved version.
     // manager.save(filename);
     // TODO: Get this from the path instead of hardcoding it
-    const list_intents = `src/interpretation/module/documents/intents.json`;
+    const list_intents = `src/utilities/interpretation/module/documents/intents.json`;
     writeFileSync(list_intents, JSON.stringify(intentsList));
     console.info("Trained");
     return manager;

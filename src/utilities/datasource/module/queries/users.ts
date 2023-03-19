@@ -6,7 +6,7 @@ import { UserRoles } from "../../../../docs/users";
 
 export const addUser = async (user: {
   username: string;
-  role: string;
+  role: UserRoles;
   email?: string;
   password?: string;
 }): Promise<{

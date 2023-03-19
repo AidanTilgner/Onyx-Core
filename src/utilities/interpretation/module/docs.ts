@@ -9,7 +9,7 @@ import { getAction, getResponse } from "./nlp/utils";
 import { formatJSON } from "libs/prettier";
 
 // TODO: Get this from the path instead of hardcoding it
-const pathToLocal = "src/interpretation/module/documents";
+const pathToLocal = "src/utilities/interpretation/module/documents";
 
 export const getTrainingData = async () => {
   return {

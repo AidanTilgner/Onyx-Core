@@ -1,6 +1,6 @@
 import Express from "express";
 import { config } from "dotenv";
-import session from "express-session";
+import session from "libs/session";
 import cors from "cors";
 import DataSourceInterface from "utilities/datasource/interface";
 import ActionsInterface from "utilities/actions/interface";
@@ -44,14 +44,8 @@ app.use(cors(corsOptions));
 
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: true }));
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "secret",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true },
-  })
-);
+
+app.use(session);
 
 app.get("/", (req, res) => {
   res.send({

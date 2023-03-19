@@ -1,8 +1,9 @@
 import channelsJSON from "channels";
-import type { AllowedModules, Channels } from "./index.d";
+import type { AllowedModules, Channels, AllowedApps } from "./index.d";
 
 const allowedModules: AllowedModules[] = ["actions"];
-const channels: Channels = channelsJSON;
+const allowedApps: AllowedApps[] = ["blogger"];
+const channels = channelsJSON as unknown as Channels;
 
 export const channelHasModulePermission = (channel: string, module: string) => {
   if (!allowedModules.includes(module as AllowedModules)) return false;
@@ -12,6 +13,16 @@ export const channelHasModulePermission = (channel: string, module: string) => {
     (mod) => mod.name === module
   );
   return channelHasModule;
+};
+
+export const channelHasAppPermission = (channel: string, app: string) => {
+  if (!allowedApps.includes(app as AllowedApps)) return false;
+  const specificChannel = channels[channel];
+  if (!specificChannel) return false;
+  const channelHasApp = !!specificChannel.permissions.apps.find(
+    (mod) => mod.name === app
+  );
+  return channelHasApp;
 };
 
 export const channelHasActionPermission = (
@@ -25,7 +36,10 @@ export const channelHasActionPermission = (
     (mod) => mod.name === module
   );
 
-  const channelHasAction = !!channelModule?.actions_allowed.find(
+  const channelHasAll = channelModule?.actions_allowed === "all";
+  if (channelHasAll) return true;
+
+  const channelHasAction = !!(channelModule?.actions_allowed as string[]).find(
     (act) => act === action
   );
 
@@ -38,7 +52,7 @@ export const channelHasCorrectAPIKey = (channel: string, api_key: string) => {
   return specificChannel.api_key === api_key;
 };
 
-export const permissionsPipeline = async (
+export const actionPermissionsPipeline = async (
   channel: string,
   module: string,
   action: string,

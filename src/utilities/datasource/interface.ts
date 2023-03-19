@@ -1,5 +1,5 @@
 import { Interface } from "docs/interfaces";
-import { database, entities } from "./module";
+import { database, initializeDB, entities } from "./module";
 import queries from "./module/queries/index";
 
 class DataSourceInterface extends Interface {
@@ -8,7 +8,7 @@ class DataSourceInterface extends Interface {
   }
 
   public async initDB() {
-    return await database.initialize();
+    return await initializeDB();
   }
 
   public useDataBase() {

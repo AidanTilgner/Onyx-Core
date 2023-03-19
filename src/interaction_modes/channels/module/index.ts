@@ -1,6 +1,6 @@
 import channels from "channels";
 import { ChannelActionBody } from "./index.d";
-import { permissionsPipeline } from "./permissions";
+import { actionPermissionsPipeline } from "./permissions";
 import { resolveActionString } from "./utils";
 
 export const getChannels = async () => {
@@ -22,7 +22,7 @@ export const resolveChannelAction = async (
   code: number;
 }> => {
   try {
-    const { passes, confirmed_module } = await permissionsPipeline(
+    const { passes, confirmed_module } = await actionPermissionsPipeline(
       channel,
       module,
       action,
