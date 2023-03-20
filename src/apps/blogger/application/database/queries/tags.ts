@@ -21,13 +21,15 @@ export const createTag = async (name: string, description: string) => {
 
 export const updateTag = async (
   id: number,
-  name: string,
-  description: string
+  update: {
+    name: string;
+    description: string;
+  }
 ) => {
   const tag = await getTag(id);
   if (tag) {
-    tag.name = name;
-    tag.description = description;
+    tag.name = update.name;
+    tag.description = update.description;
     return await database.manager.save(tag);
   }
   return null;
@@ -42,13 +44,14 @@ export const deleteTag = async (id: number) => {
 };
 
 export const getPostsByTag = async (id: number) => {
-  const tag = await getTag(id);
+  const tag = await database.manager.findOne(entities.Tag, {
+    where: {
+      id,
+    },
+    relations: ["posts"],
+  });
   if (tag) {
-    return await database.manager.find(entities.Post, {
-      where: {
-        tags: tag,
-      },
-    });
+    return tag.posts;
   }
   return null;
 };

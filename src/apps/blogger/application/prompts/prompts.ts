@@ -75,13 +75,16 @@ class InitialArticlePrompt {
 
     Now that you have a good idea of what I'm looking for, here's the format that the article should follow:
     _________________________________________________________________
-    ${format(getExamplePost())}
+    ${format(getExamplePost(), { parser: "markdown" })}
     _________________________________________________________________
     Thank you in advance for your help! I'm looking forward to seeing what you come up with!
     `;
   }
 
-  public getInitialMessages() {
+  public getInitialMessages(): {
+    content: string;
+    role: "user" | "system" | "assistant";
+  }[] {
     return [
       {
         content: this.getInitialPrompt(),
@@ -95,7 +98,7 @@ class InitialArticlePrompt {
   }
 }
 
-export const generateIntialArticle = async (info: {
+export const generateIntialArticlePromptMessages = async (info: {
   title: string;
   description: string;
   importantPoints: string[];
@@ -107,8 +110,10 @@ export const generateIntialArticle = async (info: {
 }) => {
   try {
     const prompt = new InitialArticlePrompt(info);
+
+    return prompt.getInitialMessages();
   } catch (err) {
     console.error(err);
-    return null;
+    return [];
   }
 };

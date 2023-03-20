@@ -7,12 +7,12 @@ export class Prompt {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column("text")
   title!: string;
 
-  @Column()
+  @Column("text")
   content!: string;
 
-  @Column()
+  @Column("text")
   type!: PromptTypes;
 }

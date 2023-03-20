@@ -10,6 +10,8 @@ import { Tag } from "./tag";
 import { ManyToOne } from "typeorm";
 import { Author } from "./author";
 
+export type PostStates = "draft" | "published" | "archived";
+
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
@@ -25,6 +27,11 @@ export class Post {
   description!: string;
 
   @Column("text")
+  state!: PostStates;
+
+  @Column("text", {
+    unique: true,
+  })
   filename!: string;
 
   @ManyToMany(() => Tag, (tag) => tag.posts, { eager: true })

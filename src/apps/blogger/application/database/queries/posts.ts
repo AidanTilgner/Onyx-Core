@@ -1,6 +1,8 @@
 import { database, entities } from "../index";
 import { Tag } from "../models/tag";
+import { getAuthor } from "./author";
 import { getTag } from "./tags";
+import { PostStates } from "../models/post";
 
 export const getPosts = async () => {
   return await database.manager.find(entities.Post);
@@ -18,15 +20,24 @@ export const createPost = async (pst: {
   title: string;
   content: string;
   description: string;
-  author?: string;
-  filename?: string;
+  author: number;
+  filename: string;
+  state: PostStates;
 }) => {
   const post = new entities.Post();
+  if (!pst.title || !pst.content || !pst.description || !pst.author) {
+    throw new Error("Missing required fields");
+  }
   post.title = pst.title;
   post.content = pst.content;
   post.description = pst.description;
-  post.author = pst.author || "Anonymous";
-  post.filename = pst.filename || "default";
+  const foundAuther = await getAuthor(pst.author);
+  if (!foundAuther) {
+    throw new Error("Author not found");
+  }
+  post.author = foundAuther;
+  post.filename = pst.filename;
+  post.state = pst.state;
   return await database.manager.save(post);
 };
 
@@ -104,13 +115,14 @@ export const deletePost = async (id: number) => {
 };
 
 export const getTagsByPost = async (id: number) => {
-  const post = await getPost(id);
+  const post = await database.manager.findOne(entities.Post, {
+    where: {
+      id,
+    },
+    relations: ["tags"],
+  });
   if (post) {
-    return await database.manager.find(entities.Tag, {
-      where: {
-        posts: post,
-      },
-    });
+    return post.tags;
   }
   return null;
 };

@@ -14,12 +14,12 @@ export const getAuthor = async (id: number) => {
 
 export const createAuthor = async (info: {
   name: string;
-  description: string;
+  description?: string;
 }) => {
-  const author = await database.getRepository(entities.Author).save({
-    name: info.name,
-    description: info.description,
-  });
+  const author = new entities.Author();
+  author.name = info.name;
+  author.description = info.description || null;
+  await database.manager.save(author);
   return author;
 };
 
@@ -30,15 +30,20 @@ export const updateAuthor = async (
     description: string;
   }
 ) => {
-  const author = await database.getRepository(entities.Author).update(id, {
-    name: info.name,
-    description: info.description,
-  });
+  const author = await getAuthor(id);
+  if (author) {
+    author.name = info.name;
+    author.description = info.description;
+    await database.manager.save(author);
+  }
   return author;
 };
 
 export const deleteAuthor = async (id: number) => {
-  const author = await database.getRepository(entities.Author).delete(id);
+  const author = await getAuthor(id);
+  if (author) {
+    await database.manager.remove(author);
+  }
   return author;
 };
 

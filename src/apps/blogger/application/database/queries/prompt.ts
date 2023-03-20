@@ -24,17 +24,22 @@ export const createPrompt = async (prompt: {
 
 export const updatePrompt = async (
   id: number,
-  prompt: {
+  update: {
     title: string;
     content: string;
     type: PromptTypes;
   }
 ) => {
-  const updatedPrompt = await database.manager.update(
-    entities.Prompt,
-    id,
-    prompt
-  );
+  const foundPrompt = await database.manager.findOne(entities.Prompt, {
+    where: { id },
+  });
+  if (!update) {
+    return null;
+  }
+  const updatedPrompt = await database.manager.save(entities.Prompt, {
+    ...foundPrompt,
+    ...update,
+  });
   return updatedPrompt;
 };
 

@@ -9,8 +9,10 @@ export class Author {
   @Column("text")
   name!: string;
 
-  @Column("text")
-  description!: string;
+  @Column("text", {
+    nullable: true,
+  })
+  description!: string | null;
 
   @OneToMany((type) => Post, (post) => post.author)
   posts!: Post[];
