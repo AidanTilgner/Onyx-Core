@@ -6,8 +6,9 @@ import {
   getPost,
   getPosts,
   removeTagFromPost,
+  updatePost,
 } from "../database/queries/posts";
-import { generateInitialArticle, generatePost } from "./posts";
+import { finalizePost, generateInitialArticle, generatePost } from "./posts";
 
 const router = Router();
 
@@ -80,6 +81,45 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const post = {
+      title: req.body.title,
+      content: req.body.content,
+      description: req.body.description,
+      state: req.body.state,
+      filename: req.body.filename,
+    };
+
+    if (!post.title || !post.content || !post.description || !post.state) {
+      res.status(400).send({
+        message: "Invalid request",
+      });
+      return;
+    }
+
+    const updated = await updatePost(id, post);
+
+    if (!updated) {
+      res.status(404).send({
+        message: "Post not found",
+      });
+      return;
+    }
+
+    res.send({
+      message: "Post updated successfully",
+      data: updated,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      message: "Internal Server Error",
+    });
+  }
+});
+
 router.delete("/:id", async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -93,6 +133,52 @@ router.delete("/:id", async (req, res) => {
     res.send({
       message: "Post deleted successfully",
       data: deleted,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      message: "Internal Server Error",
+    });
+  }
+});
+
+router.post("/:id/tag/:tag_id", async (req, res) => {
+  try {
+    const postId = parseInt(req.params.id);
+    const tagId = parseInt(req.params.tag_id);
+    const post = await addTagToPost(postId, tagId);
+    if (!post) {
+      res.status(400).send({
+        message: "Bad Request",
+      });
+      return;
+    }
+    res.send({
+      message: "Tag added successfully",
+      data: post,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      message: "Internal Server Error",
+    });
+  }
+});
+
+router.delete("/:id/tag/:tag_id", async (req, res) => {
+  try {
+    const postId = parseInt(req.params.id);
+    const tagId = parseInt(req.params.tag_id);
+    const post = await removeTagFromPost(postId, tagId);
+    if (!post) {
+      res.status(400).send({
+        message: "Bad Request",
+      });
+      return;
+    }
+    res.send({
+      message: "Tag removed successfully",
+      data: post,
     });
   } catch (err) {
     console.error(err);
@@ -148,43 +234,21 @@ router.post("/generate", async (req, res) => {
   }
 });
 
-router.post("/:id/tag/:tag_id", async (req, res) => {
+router.post("/:id/finalize", async (req, res) => {
+  // Todo: Should probably have more auth on this given the actions it can perform
   try {
-    const postId = parseInt(req.params.id);
-    const tagId = parseInt(req.params.tag_id);
-    const post = await addTagToPost(postId, tagId);
-    if (!post) {
-      res.status(400).send({
-        message: "Bad Request",
-      });
-      return;
-    }
-    res.send({
-      message: "Tag added successfully",
-      data: post,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({
-      message: "Internal Server Error",
-    });
-  }
-});
+    const finalized = await finalizePost(Number(req.params.id));
 
-router.delete("/:id/tag/:tag_id", async (req, res) => {
-  try {
-    const postId = parseInt(req.params.id);
-    const tagId = parseInt(req.params.tag_id);
-    const post = await removeTagFromPost(postId, tagId);
-    if (!post) {
+    if (!finalized) {
       res.status(400).send({
         message: "Bad Request",
       });
       return;
     }
+
     res.send({
-      message: "Tag removed successfully",
-      data: post,
+      message: "Post finalized successfully",
+      data: finalized,
     });
   } catch (err) {
     console.error(err);

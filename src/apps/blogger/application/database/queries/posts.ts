@@ -2,7 +2,7 @@ import { database, entities } from "../index";
 import { Tag } from "../models/tag";
 import { getAuthor } from "./author";
 import { getTag } from "./tags";
-import { PostStates } from "../models/post";
+import { Post, PostStates } from "../models/post";
 
 export const getPosts = async () => {
   return await database.manager.find(entities.Post);
@@ -87,20 +87,14 @@ export const removeTagsFromPost = async (postId: number, tagIds: number[]) => {
   return null;
 };
 
-export const updatePost = async (
-  id: number,
-  updates: {
-    title: string;
-    content: string;
-    description: string;
-    author: string;
-    filename: string;
-  }
-) => {
+export const updatePost = async (id: number, updates: Partial<Post>) => {
   const post = await getPost(id);
   if (post) {
-    const newPost = { ...post, ...updates };
-    return await database.manager.save(newPost);
+    post.title = updates.title || post.title;
+    post.content = updates.content || post.content;
+    post.description = updates.description || post.description;
+    post.filename = updates.filename || post.filename;
+    return await database.manager.save(post);
   }
 
   return null;

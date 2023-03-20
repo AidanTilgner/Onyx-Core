@@ -4,7 +4,7 @@ import { getPrompt } from "../database/queries/prompt";
 import { generateIntialArticlePromptMessages } from "../prompts/prompts";
 import { formatTitleIntoFilename } from "../utils/formatting";
 import { getExampleReader } from "../database/queries/reader";
-import { createPost } from "../database/queries/posts";
+import { createPost, getPost, updatePost } from "../database/queries/posts";
 
 export const generateInitialArticle = async (info: {
   title: string;
@@ -79,6 +79,23 @@ export const generatePost = async (info: {
     });
 
     return post;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
+export const finalizePost = async (id: number) => {
+  try {
+    const post = await getPost(id);
+
+    if (!post) throw new Error("Post not found");
+
+    const updated = await updatePost(post.id, {
+      state: "published",
+    });
+
+    return updated;
   } catch (err) {
     console.error(err);
     return null;

@@ -5,6 +5,9 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToOne,
 } from "typeorm";
 import { Tag } from "./tag";
 import { ManyToOne } from "typeorm";
@@ -38,6 +41,12 @@ export class Post {
   @JoinTable()
   tags!: Tag[];
 
-  @ManyToOne(() => Author, (author) => author.posts)
+  @ManyToOne(() => Author, (author) => author.posts, { eager: true })
   author!: Author;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }
