@@ -29,7 +29,9 @@ export class Post {
   @Column("text")
   description!: string;
 
-  @Column("text")
+  @Column("text", {
+    default: "draft",
+  })
   state!: PostStates;
 
   @Column("text", {
