@@ -8,3 +8,4 @@ channels.json
 dist
 locations.local.config.json
 *.scratch.*
+sessions/
