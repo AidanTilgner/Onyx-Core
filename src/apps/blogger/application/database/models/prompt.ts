@@ -5,8 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-
-export type PromptTypes = "system" | "assistant" | "user";
+import { ChatPromptType } from "docs/openai";
 
 @Entity()
 export class Prompt {
@@ -20,7 +19,7 @@ export class Prompt {
   content!: string;
 
   @Column("text")
-  type!: PromptTypes;
+  type!: ChatPromptType;
 
   @CreateDateColumn()
   createdAt!: Date;

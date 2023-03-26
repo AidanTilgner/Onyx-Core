@@ -1,5 +1,5 @@
+import { ChatPromptType } from "docs/openai";
 import { database, entities } from "..";
-import { PromptTypes } from "../models/prompt";
 
 export const getPrompts = async () => {
   const prompts = await database.manager.find(entities.Prompt);
@@ -16,7 +16,7 @@ export const getPrompt = async (id: number) => {
 export const createPrompt = async (prompt: {
   title: string;
   content: string;
-  type: PromptTypes;
+  type: ChatPromptType;
 }) => {
   const newPrompt = await database.manager.save(entities.Prompt, prompt);
   return newPrompt;
@@ -27,7 +27,7 @@ export const updatePrompt = async (
   update: {
     title: string;
     content: string;
-    type: PromptTypes;
+    type: ChatPromptType;
   }
 ) => {
   const foundPrompt = await database.manager.findOne(entities.Prompt, {
