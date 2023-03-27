@@ -1,5 +1,12 @@
 import { ChatPromptType } from "docs/openai";
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Conversation } from "./Conversation";
 
 @Entity()
@@ -18,4 +25,10 @@ export class Prompt {
 
   @OneToMany(() => Conversation, (conversation) => conversation.prompt)
   conversations!: Conversation[];
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }

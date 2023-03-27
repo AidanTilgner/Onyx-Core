@@ -4,6 +4,8 @@ import {
   Entity,
   OneToMany,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { Chat } from "./Chat";
 import { Prompt } from "./Prompt";
@@ -25,4 +27,10 @@ export class Conversation {
     nullable: false,
   })
   prompt!: Prompt;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }

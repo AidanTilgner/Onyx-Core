@@ -52,7 +52,7 @@ router.post("/", async (req, res) => {
       return;
     }
 
-    const prompt = await createPrompt(data.name, data.type, data.content);
+    const prompt = await createPrompt(data.name, data.content, data.type);
 
     if (!prompt) {
       res.status(500).send({ error: "Internal Server Error" });
