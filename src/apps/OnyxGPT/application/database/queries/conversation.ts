@@ -93,8 +93,6 @@ export const createChatInConversation = async (
     chat.type = type;
     chat.conversation = conversation;
     await database.manager.save(chat);
-    console.log("New conversation chat", chat);
-    console.log("New conversation", conversation);
     if (!chat) return null;
     return conversation;
   } catch (error) {

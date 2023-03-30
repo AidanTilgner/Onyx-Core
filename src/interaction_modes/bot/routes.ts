@@ -9,7 +9,7 @@ const router = Router();
 
 router.get("/", auth.useMiddleware().authenticateToken, (req, res) => {
   const { user_id } = req.session as unknown as CustomSessionData;
-  console.log("User: ", user_id);
+
   res.send({
     message: "This is Onyx, how may I help you?",
   });

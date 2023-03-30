@@ -131,7 +131,10 @@ router.post("/:id/chats", async (req, res) => {
 
     res.send({
       message: "Success",
-      data: newConversation,
+      data: {
+        ...newConversation,
+        modelUsed: data.model || "gpt-3.5-turbo",
+      },
     });
   } catch (error) {
     console.error(error);
